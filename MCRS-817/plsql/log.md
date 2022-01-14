@@ -2,6 +2,7 @@
 ### Fecha       Descripcion
 * 14/01/2022    Se coloca al control github esta solicitud
 * 14/01/2022    Se modifica el paquete gc_k_cobro_aviso_bco_nacional, funcion **f_verifica_poliza_grupo**
+* 14/01/2022    Se modifica el paquete gc_k_cobro_aviso_bco_nacional, procedimiento **p_numero_poliza**, se filtra por ramo 230
 
                 
 ### Objetos Relacionados
