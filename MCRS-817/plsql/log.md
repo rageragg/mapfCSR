@@ -1,14 +1,11 @@
 # Registro de Actividades Resaltantes
 ### Fecha       Descripcion
-* 12/01/2022    Se coloca al control github esta solicitud
-* 12/01/2022    Se analiza expediente en JIRA
-* 12/01/2022    Se realizan comparaciones con respaldo y SCV, (sin diferencia)
-* 12/01/2022    Se realizan pruebas iniciales
+* 14/01/2022    Se coloca al control github esta solicitud
+
                 
 ### Objetos Relacionados
-- dc_k_terceros_trn, Paquete de Procesamiento de datos de terceros
-- a1001331, tablas de terceros asociados a polizas
-- a2000030, polizas
-- a2990700, recibos asociados a una poliza
-- a5020301, historico de movimientos de recibos
-
+- gc_k_cobro_aviso_bco_nacional, Paquete de Procesamiento de datos de la solicitud
+- programa_config, Configuracion del programa para la ejecucion de tronweb
+- reporte_config, Configuracion del reporte para la ejecucion de tronweb
+- tarea_config, Configuracion de la tarea para la ejecucion de tronweb, se ejecuta esta tarea via 
+  gc_k_cobro_aviso_bco_nacional.p_aviso_cobro_globales
