@@ -572,7 +572,8 @@ CREATE OR REPLACE PACKAGE BODY gc_k_cobro_aviso_bco_nacional IS
                AND c.num_poliza  = a.num_poliza
                AND c.cod_campo   = 'NUM_TARJETA'
                AND c.val_campo   = g_num_tarjeta 
-               AND c.mca_vigente = 'S';
+               AND c.mca_vigente = 'S'
+               AND b.cod_ramo IN ( 230 );
         --
     BEGIN 
         --
