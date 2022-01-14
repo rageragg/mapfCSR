@@ -1,0 +1,9 @@
+@tarea_config.sql
+@reporte_config.sql 
+@programa_config.sql
+
+@gc_k_cobro_aviso_bco_nacional.sps
+@gc_k_cobro_aviso_bco_nacional.spb
+
+DROP   PUBLIC  SYNONYM gc_k_cobro_aviso_bco_nacional;
+CREATE PUBLIC  SYNONYM gc_k_cobro_aviso_bco_nacional FOR gc_k_cobro_aviso_bco_nacional;
