@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="em_k_jrp_aviso_purdy_sub2_cpto_prima_mcr" pageWidth="555" pageHeight="802" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
+	<property name="ireport.zoom" value="1.771561000000001"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<queryString language="xPath">
+		<![CDATA[report/param]]>
+	</queryString>
+	<field name="Sub_Concepto_par" class="java.lang.String">
+		<fieldDescription><![CDATA[/report/param/Sub_Concepto_par]]></fieldDescription>
+	</field>
+	<field name="Sub_Monto_par" class="java.lang.String">
+		<fieldDescription><![CDATA[/report/param/Sub_Monto_par]]></fieldDescription>
+	</field>
+	<field name="PrimaNeta_par" class="java.lang.String">
+		<fieldDescription><![CDATA[/report/param/PrimaNeta_par]]></fieldDescription>
+	</field>
+	<field name="IV_par" class="java.lang.String">
+		<fieldDescription><![CDATA[/report/param/IV_par]]></fieldDescription>
+	</field>
+	<field name="Recargo_par" class="java.lang.String">
+		<fieldDescription><![CDATA[/report/param/Recargo_par]]></fieldDescription>
+	</field>
+	<field name="PrimaTotal_par" class="java.lang.String">
+		<fieldDescription><![CDATA[/report/param/PrimaTotal_par]]></fieldDescription>
+	</field>
+	<field name="TotalSumaAseg_par" class="java.lang.String">
+		<fieldDescription><![CDATA[/report/param/TotalSumaAseg_par]]></fieldDescription>
+	</field>
+	<field name="Simb_Moneda_par" class="java.lang.String">
+		<fieldDescription><![CDATA[/report/param/Simb_Moneda_par]]></fieldDescription>
+	</field>
+	<field name="F_concepto_par" class="java.lang.String">
+		<fieldDescription><![CDATA[/report/param/F_concepto_par]]></fieldDescription>
+	</field>
+	<field name="F_primaneta_par" class="java.lang.String">
+		<fieldDescription><![CDATA[/report/param/F_primaneta_par]]></fieldDescription>
+	</field>
+	<field name="F_iva_par" class="java.lang.String">
+		<fieldDescription><![CDATA[/report/param/F_iva_par]]></fieldDescription>
+	</field>
+	<field name="F_recargofin_par" class="java.lang.String">
+		<fieldDescription><![CDATA[/report/param/F_recargofin_par]]></fieldDescription>
+	</field>
+	<field name="F_primatotal_par" class="java.lang.String">
+		<fieldDescription><![CDATA[/report/param/F_primatotal_par]]></fieldDescription>
+	</field>
+	<field name="F_comision_par" class="java.lang.String">
+		<fieldDescription><![CDATA[/report/param/F_comision_par]]></fieldDescription>
+	</field>
+	<field name="F_retencion_par" class="java.lang.String">
+		<fieldDescription><![CDATA[/report/param/F_retencion_par]]></fieldDescription>
+	</field>
+	<field name="Comision_par" class="java.lang.String">
+		<fieldDescription><![CDATA[/report/param/Comision_par]]></fieldDescription>
+	</field>
+	<field name="Retencion_par" class="java.lang.String">
+		<fieldDescription><![CDATA[/report/param/Retencion_par]]></fieldDescription>
+	</field>
+	<field name="IVComision_par" class="java.lang.String">
+		<fieldDescription><![CDATA[IVComision_par]]></fieldDescription>
+	</field>
+	<field name="F_ivacomision_par" class="java.lang.String">
+		<fieldDescription><![CDATA[F_ivacomision_par]]></fieldDescription>
+	</field>
+	<field name="F_totalbruto_par" class="java.lang.String">
+		<fieldDescription><![CDATA[F_totalbruto_par]]></fieldDescription>
+	</field>
+	<field name="TotalBruto_par" class="java.lang.String">
+		<fieldDescription><![CDATA[TotalBruto_par]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="31" splitType="Stretch">
+			<rectangle radius="10">
+				<reportElement x="0" y="0" width="556" height="30" backcolor="#666666"/>
+			</rectangle>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="75" y="5" width="100" height="20" forecolor="#FFFFFF"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Sub_Concepto_par}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="366" y="5" width="100" height="20" forecolor="#FFFFFF"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Sub_Monto_par}+" a Pagar"]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="140" splitType="Stretch">
+			<rectangle radius="10">
+				<reportElement x="0" y="0" width="278" height="109"/>
+			</rectangle>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="11" y="25" width="256" height="56"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{F_concepto_par}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="293" y="16" width="100" height="15"/>
+				<textElement>
+					<font fontName="Courier New" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Prima Neta]]></text>
+			</staticText>
+			<rectangle radius="10">
+				<reportElement x="277" y="0" width="278" height="109"/>
+			</rectangle>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="420" y="1" width="21" height="14"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Simb_Moneda_par}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="440" y="1" width="100" height="14"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{F_primaneta_par}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="440" y="15" width="100" height="15"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{F_iva_par}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="440" y="91" width="100" height="15"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{F_recargofin_par}]]></textFieldExpression>
+			</textField>
+			<rectangle radius="10">
+				<reportElement x="0" y="109" width="278" height="30" forecolor="#000000" backcolor="#CCCCCC"/>
+			</rectangle>
+			<rectangle radius="10">
+				<reportElement x="277" y="109" width="278" height="30" backcolor="#CCCCCC"/>
+			</rectangle>
+			<textField>
+				<reportElement x="122" y="114" width="145" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Ver Condiciones Particulares"]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="441" y="114" width="99" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{F_primatotal_par}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="293" y="2" width="73" height="14"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PrimaNeta_par}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="293" y="15" width="73" height="15"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{IV_par}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="293" y="91" width="73" height="15"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Recargo_par}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="293" y="114" width="73" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PrimaTotal_par}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="11" y="114" width="111" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TotalSumaAseg_par}.toUpperCase()+" SUMA ASEGURADA:"]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="419" y="15" width="21" height="15"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Simb_Moneda_par}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="419" y="91" width="21" height="15"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Simb_Moneda_par}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="419" y="114" width="21" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Simb_Moneda_par}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="440" y="46" width="100" height="15"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{F_comision_par}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="419" y="46" width="21" height="15"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Simb_Moneda_par}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="440" y="77" width="100" height="15"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{F_retencion_par}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="419" y="76" width="21" height="15"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Simb_Moneda_par}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="293" y="46" width="73" height="15"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Comision_par}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="293" y="76" width="73" height="15"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Retencion_par}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="419" y="61" width="21" height="15"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Simb_Moneda_par}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="293" y="61" width="73" height="15"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{IVComision_par}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="440" y="61" width="100" height="15"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{F_ivacomision_par}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="293" y="31" width="100" height="15"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TotalBruto_par}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="419" y="30" width="21" height="15"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Simb_Moneda_par}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="440" y="30" width="100" height="15"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{F_totalbruto_par}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

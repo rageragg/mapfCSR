@@ -1,0 +1,543 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="em_k_jrp_aviso_purdy_mcr" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="2.0"/>
+	<property name="ireport.x" value="23"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["/com/mapfre/trn/jrp/em/"]]></defaultValueExpression>
+	</parameter>
+	<queryString language="xPath">
+		<![CDATA[report/param]]>
+	</queryString>
+	<field name="No_par" class="java.lang.String">
+		<fieldDescription><![CDATA[/report/param/No_par]]></fieldDescription>
+	</field>
+	<field name="Cedula_par" class="java.lang.String">
+		<fieldDescription><![CDATA[/report/param/Cedula_par]]></fieldDescription>
+	</field>
+	<field name="Fecha_par" class="java.lang.String">
+		<fieldDescription><![CDATA[/report/param/Fecha_par]]></fieldDescription>
+	</field>
+	<field name="NombreTomador_par" class="java.lang.String">
+		<fieldDescription><![CDATA[/report/param/NombreTomador_par]]></fieldDescription>
+	</field>
+	<field name="PolizaNo_par" class="java.lang.String">
+		<fieldDescription><![CDATA[/report/param/PolizaNo_par]]></fieldDescription>
+	</field>
+	<field name="Ramo_par" class="java.lang.String">
+		<fieldDescription><![CDATA[/report/param/Ramo_par]]></fieldDescription>
+	</field>
+	<field name="Intermediario_par" class="java.lang.String">
+		<fieldDescription><![CDATA[/report/param/Intermediario_par]]></fieldDescription>
+	</field>
+	<field name="DireccionExacta_par" class="java.lang.String">
+		<fieldDescription><![CDATA[/report/param/DireccionExacta_par]]></fieldDescription>
+	</field>
+	<field name="Moneda_par" class="java.lang.String">
+		<fieldDescription><![CDATA[/report/param/Moneda_par]]></fieldDescription>
+	</field>
+	<field name="Vigencia_par" class="java.lang.String">
+		<fieldDescription><![CDATA[/report/param/Vigencia_par]]></fieldDescription>
+	</field>
+	<field name="Desde_par" class="java.lang.String">
+		<fieldDescription><![CDATA[/report/param/Desde_par]]></fieldDescription>
+	</field>
+	<field name="Hasta_par" class="java.lang.String">
+		<fieldDescription><![CDATA[/report/param/Hasta_par]]></fieldDescription>
+	</field>
+	<field name="Hora_par" class="java.lang.String">
+		<fieldDescription><![CDATA[/report/param/Hora_par]]></fieldDescription>
+	</field>
+	<field name="Titulo_par" class="java.lang.String">
+		<fieldDescription><![CDATA[/report/param/Titulo_par]]></fieldDescription>
+	</field>
+	<field name="F_ideaseg_par" class="java.lang.String">
+		<fieldDescription><![CDATA[/report/param/F_ideaseg_par]]></fieldDescription>
+	</field>
+	<field name="F_Fecsys_par" class="java.lang.String">
+		<fieldDescription><![CDATA[/report/param/F_Fecsys_par]]></fieldDescription>
+	</field>
+	<field name="Nom_Aseg_par" class="java.lang.String">
+		<fieldDescription><![CDATA[/report/param/Nom_Aseg_par]]></fieldDescription>
+	</field>
+	<field name="Direccion_par" class="java.lang.String">
+		<fieldDescription><![CDATA[/report/param/Direccion_par]]></fieldDescription>
+	</field>
+	<field name="F_numpoliza_par" class="java.lang.String">
+		<fieldDescription><![CDATA[/report/param/F_numpoliza_par]]></fieldDescription>
+	</field>
+	<field name="F_nomramo_par" class="java.lang.String">
+		<fieldDescription><![CDATA[/report/param/F_nomramo_par]]></fieldDescription>
+	</field>
+	<field name="Nom_Agente_par" class="java.lang.String">
+		<fieldDescription><![CDATA[/report/param/Nom_Agente_par]]></fieldDescription>
+	</field>
+	<field name="Nomb_moneda_par" class="java.lang.String">
+		<fieldDescription><![CDATA[/report/param/Nomb_moneda_par]]></fieldDescription>
+	</field>
+	<field name="F_efecpoliza_par" class="java.lang.String">
+		<fieldDescription><![CDATA[/report/param/F_efecpoliza_par]]></fieldDescription>
+	</field>
+	<field name="F_vctopoliza_par" class="java.lang.String">
+		<fieldDescription><![CDATA[/report/param/F_vctopoliza_par]]></fieldDescription>
+	</field>
+	<field name="F_numaviso_par" class="java.lang.String">
+		<fieldDescription><![CDATA[/report/param/F_numaviso_par]]></fieldDescription>
+	</field>
+	<field name="docum_cia_par" class="java.lang.String">
+		<fieldDescription><![CDATA[/report/param/docum_cia_par]]></fieldDescription>
+	</field>
+	<field name="provincia_cia_par" class="java.lang.String">
+		<fieldDescription><![CDATA[/report/param/provincia_cia_par]]></fieldDescription>
+	</field>
+	<field name="domicilio_cia_par" class="java.lang.String">
+		<fieldDescription><![CDATA[/report/param/domicilio_cia_par]]></fieldDescription>
+	</field>
+	<field name="tlf_cia_par" class="java.lang.String">
+		<fieldDescription><![CDATA[/report/param/tlf_cia_par]]></fieldDescription>
+	</field>
+	<field name="fax_cia_par" class="java.lang.String">
+		<fieldDescription><![CDATA[/report/param/fax_cia_par]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="260">
+			<frame>
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="-4" y="0" width="564" height="254"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<subreport>
+					<reportElement x="3" y="168" width="200" height="40"/>
+					<dataSourceExpression><![CDATA[((net.sf.jasperreports.engine.data.JRXmlDataSource)$P{REPORT_DATA_SOURCE}).dataSource("report/param")]]></dataSourceExpression>
+					<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "em_k_jrp_aviso_purdy_sub2_cpto_prima_mcr.jasper"]]></subreportExpression>
+				</subreport>
+				<rectangle radius="10">
+					<reportElement x="4" y="54" width="278" height="92"/>
+				</rectangle>
+				<rectangle radius="10">
+					<reportElement x="281" y="54" width="278" height="92"/>
+				</rectangle>
+				<line>
+					<reportElement x="214" y="1" width="1" height="46"/>
+				</line>
+				<textField isBlankWhenNull="true">
+					<reportElement x="98" y="27" width="82" height="20"/>
+					<textElement>
+						<font fontName="Arial" size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{F_numaviso_par}]]></textFieldExpression>
+				</textField>
+				<image>
+					<reportElement positionType="Float" x="151" y="217" width="241" height="31"/>
+					<imageExpression><![CDATA["/img/logos MCR/logo.jpg"]]></imageExpression>
+				</image>
+				<textField isBlankWhenNull="true">
+					<reportElement x="75" y="27" width="23" height="20"/>
+					<textElement>
+						<font fontName="Arial" size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{No_par}+"."]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="18" y="61" width="82" height="14"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Arial" size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{Cedula_par}+":"]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="18" y="77" width="82" height="14"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Arial" size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{NombreTomador_par}+":"]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="18" y="100" width="100" height="14"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Arial" size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{DireccionExacta_par}+" exacta:"]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="298" y="67" width="62" height="14"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Arial" size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{Fecha_par}+":"]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="298" y="81" width="62" height="14"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Arial" size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{Ramo_par}+":"]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="298" y="94" width="62" height="14"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Arial" size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{Intermediario_par}+":"]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="298" y="107" width="62" height="14"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Arial" size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{Moneda_par}+":"]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="298" y="121" width="62" height="14"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Arial" size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{PolizaNo_par}+":"]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="18" y="151" width="73" height="14"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Arial" size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{Vigencia_par}+":"]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="91" y="151" width="30" height="14"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Arial" size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{Desde_par}+":"]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="218" y="151" width="30" height="14"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Arial" size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{Hasta_par}+":"]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="330" y="151" width="124" height="14"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Arial" size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{Hora_par}+": 12:00 HORAS"]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="28" y="2" width="175" height="20"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Arial" size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{Titulo_par}.toUpperCase()]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="495" y="0" width="64" height="20" forecolor="#999999"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Arial" size="6"/>
+					</textElement>
+					<textFieldExpression><![CDATA["ORIGINAL:CLIENTE"]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="98" y="61" width="105" height="14"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Arial" size="8" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{F_ideaseg_par}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="98" y="77" width="164" height="14"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Arial" size="8" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{Nom_Aseg_par}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="18" y="114" width="244" height="28"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Arial" size="8" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{Direccion_par}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="360" y="67" width="82" height="14"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Arial" size="8" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{F_Fecsys_par}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="360" y="80" width="176" height="14"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Arial" size="8" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{F_nomramo_par}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="360" y="94" width="186" height="14"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Arial" size="8" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{Nom_Agente_par}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="360" y="108" width="176" height="14"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Arial" size="8" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{Nomb_moneda_par}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="360" y="121" width="176" height="14"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Arial" size="8" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{F_numpoliza_par}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="121" y="151" width="82" height="14"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Arial" size="8" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{F_efecpoliza_par}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="248" y="151" width="82" height="14"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Arial" size="8" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{F_vctopoliza_par}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="260" y="3" width="138" height="45"/>
+					<textElement>
+						<font fontName="Arial" size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Cédula Jurídica. "+$F{docum_cia_par}+" "+$F{provincia_cia_par}+" "+$F{domicilio_cia_par}+" "+$F{tlf_cia_par}+" "+$F{fax_cia_par}+" Línea Gratuita. 8000-MAPFRE"]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+		<band height="257">
+			<frame>
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="-4" y="0" width="564" height="256"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<rectangle radius="10">
+					<reportElement x="3" y="55" width="278" height="92"/>
+				</rectangle>
+				<rectangle radius="10">
+					<reportElement x="280" y="55" width="278" height="92"/>
+				</rectangle>
+				<textField>
+					<reportElement x="494" y="0" width="64" height="20" forecolor="#999999"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Arial" size="6"/>
+					</textElement>
+					<textFieldExpression><![CDATA["COPIA: ARCHIVO"]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="97" y="28" width="82" height="20"/>
+					<textElement>
+						<font fontName="Arial" size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{F_numaviso_par}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="17" y="62" width="82" height="14"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Arial" size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{Cedula_par}+":"]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="297" y="95" width="63" height="14"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Arial" size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{Intermediario_par}+":"]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="297" y="82" width="62" height="14"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Arial" size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{Ramo_par}+":"]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="74" y="28" width="23" height="20"/>
+					<textElement>
+						<font fontName="Arial" size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{No_par}+"."]]></textFieldExpression>
+				</textField>
+				<subreport>
+					<reportElement x="2" y="169" width="200" height="40"/>
+					<dataSourceExpression><![CDATA[((net.sf.jasperreports.engine.data.JRXmlDataSource)$P{REPORT_DATA_SOURCE}).dataSource("report/param")]]></dataSourceExpression>
+					<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "em_k_jrp_aviso_purdy_sub2_cpto_prima_mcr.jasper"]]></subreportExpression>
+				</subreport>
+				<line>
+					<reportElement x="213" y="2" width="1" height="46"/>
+				</line>
+				<textField isBlankWhenNull="true">
+					<reportElement x="17" y="78" width="82" height="14"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Arial" size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{NombreTomador_par}+":"]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="17" y="152" width="73" height="14"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Arial" size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{Vigencia_par}+":"]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="17" y="102" width="100" height="14"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Arial" size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{DireccionExacta_par}+" exacta:"]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="27" y="2" width="175" height="20"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Arial" size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{Titulo_par}.toUpperCase()]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="329" y="152" width="124" height="14"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Arial" size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{Hora_par}+": 12:00 HORAS"]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="297" y="122" width="62" height="14"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Arial" size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{PolizaNo_par}+":"]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="297" y="68" width="62" height="14"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Arial" size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{Fecha_par}+":"]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="297" y="108" width="62" height="14"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Arial" size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{Moneda_par}+":"]]></textFieldExpression>
+				</textField>
+				<image>
+					<reportElement positionType="Float" x="150" y="218" width="241" height="31"/>
+					<imageExpression><![CDATA["/img/logos MCR/logo.jpg"]]></imageExpression>
+				</image>
+				<textField isBlankWhenNull="true">
+					<reportElement x="99" y="62" width="82" height="14"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Arial" size="8" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{F_ideaseg_par}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="99" y="78" width="82" height="14"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Arial" size="8" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{Nom_Aseg_par}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="17" y="116" width="244" height="28"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Arial" size="8" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{Direccion_par}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="359" y="109" width="176" height="14"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Arial" size="8" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{Nomb_moneda_par}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="359" y="122" width="176" height="14"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Arial" size="8" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{F_numpoliza_par}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="359" y="68" width="82" height="14"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Arial" size="8" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{F_Fecsys_par}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="360" y="95" width="185" height="14"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Arial" size="8" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{Nom_Agente_par}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="359" y="81" width="176" height="14"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Arial" size="8" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{F_nomramo_par}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="120" y="152" width="82" height="14"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Arial" size="8" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{F_efecpoliza_par}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="247" y="152" width="82" height="14"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Arial" size="8" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{F_vctopoliza_par}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="90" y="152" width="30" height="14"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Arial" size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{Desde_par}+":"]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="217" y="152" width="30" height="14"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Arial" size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{Hasta_par}+":"]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="261" y="3" width="138" height="45"/>
+					<textElement>
+						<font fontName="Arial" size="7"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Cédula Jurídica. "+$F{docum_cia_par}+" "+$F{provincia_cia_par}+" "+$F{domicilio_cia_par}+" "+$F{tlf_cia_par}+" "+$F{fax_cia_par}+" Línea Gratuita. 8000-MAPFRE"]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</detail>
+</jasperReport>

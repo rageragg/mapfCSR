@@ -26,8 +26,8 @@ create or replace PACKAGE BODY em_k_jrp_aviso_purdy_mcr AS
   g_extension       PLS_INTEGER := trn_k_lis.ext_java;
   g_titulo_listado  VARCHAR2(1000) := NULL;
   g_pagina          PLS_INTEGER;
-  g_linea           VARCHAR2(5000);
-  g_txt_cab         VARCHAR2(5000);
+  g_linea           VARCHAR2(16000);
+  g_txt_cab         VARCHAR2(16000);
   g_bool_write_form BOOLEAN := FALSE;
   g_cod_error       NUMBER;
   g_msg_error       VARCHAR2(2000);
@@ -35,7 +35,7 @@ create or replace PACKAGE BODY em_k_jrp_aviso_purdy_mcr AS
   g_idioma          VARCHAR2(3);
   --
   g_secuencial    NUMBER := 0;
-  g_id_fichero    BINARY_INTEGER := 0;
+  g_id_fichero    NUMBER := 0; -- BINARY_INTEGER := 0;
   g_clob_datos    CLOB;
   g_clob_cab_par  CLOB;
   g_clob_cab_dat  CLOB;
@@ -976,7 +976,7 @@ create or replace PACKAGE BODY em_k_jrp_aviso_purdy_mcr AS
                  l_primatotal || ';' || l_documcia || ';' || l_provinciacia || ';' ||
                  l_domiciliocia || ';' || l_tlfcia || ';' || l_faxcia || ';' ||
                  l_comision || ';' || l_retencion || ';' || l_ivacomis ||';'||
-                 l_imptotbruto|| ';'||l_polizagrupo||';'||l_nombre_asegurado;
+                 l_imptotbruto|| ';'||l_polizagrupo||';'||l_nombre_asegurado||';';
       --
       g_linea := f_procesa_cad(g_linea);
       --

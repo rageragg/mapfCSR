@@ -6,3 +6,6 @@
                 
 ### Objetos Relacionados
 - **em_k_jrp_aviso_purdy_mcr**, Paquete de Procesamiento de datos de la solicitud
+
+## Notas
+- El repositorio de los reportes para este caso es **TRONWEB_REPORTS**
