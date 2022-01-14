@@ -61,14 +61,17 @@ CREATE OR REPLACE PACKAGE BODY gc_k_cobro_aviso_bco_nacional IS
         l_ok    BOOLEAN := FALSE;
     BEGIN 
         --
-        FOR i IN 1..g_tab_polizas_grupo.count LOOP 
-            IF g_tab_polizas_grupo(i) = p_poliza_grupo THEN 
-                l_ok := TRUE;
-                EXIT;
-            END IF;
-        END LOOP;
+        -- Se modifica segun observaciones de Michael Montero en reunion de seguimiento, 13/01/2022
+        -- FOR i IN 1..g_tab_polizas_grupo.count LOOP 
+        --     IF g_tab_polizas_grupo(i) = p_poliza_grupo THEN 
+        --         l_ok := TRUE;
+        --         EXIT;
+        --     END IF;
+        -- END LOOP;
         --
-        RETURN l_ok;
+        -- RETURN l_ok;
+        --
+        RETURN TRUE;
         --
     END f_verifica_poliza_grupo;
     --

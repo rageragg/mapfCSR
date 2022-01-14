@@ -1,6 +1,7 @@
 # Registro de Actividades Resaltantes
 ### Fecha       Descripcion
 * 14/01/2022    Se coloca al control github esta solicitud
+* 14/01/2022    Se modifica el paquete gc_k_cobro_aviso_bco_nacional, funcion **f_verifica_poliza_grupo**
 
                 
 ### Objetos Relacionados
