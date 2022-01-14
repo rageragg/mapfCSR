@@ -1,0 +1,6 @@
+@em_k_jrp_aviso_purdy_mcr.sps
+@em_k_jrp_aviso_purdy_mcr.spb
+
+--
+DROP   PUBLIC  SYNONYM em_k_jrp_aviso_purdy_mcr;
+CREATE PUBLIC  SYNONYM em_k_jrp_aviso_purdy_mcr FOR em_k_jrp_aviso_purdy_mcr;
