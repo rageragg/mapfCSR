@@ -4,6 +4,7 @@
 * 12/01/2022    Se analiza expediente en JIRA
 * 12/01/2022    Se realizan comparaciones con respaldo y SCV, (sin diferencia)
 * 12/01/2022    Se realizan pruebas iniciales
+* 14/01/2022    Se contruye paquete gc_k_mov_economico_mcr para servir la function tabla
                 
 ### Objetos Relacionados
 - dc_k_terceros_trn, Paquete de Procesamiento de datos de terceros
@@ -11,4 +12,5 @@
 - a2000030, polizas
 - a2990700, recibos asociados a una poliza
 - a5020301, historico de movimientos de recibos
+- gc_k_mov_economico_mcr, paquete contendedor de proceso de vista
 
