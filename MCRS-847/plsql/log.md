@@ -3,8 +3,9 @@
 * 12/01/2022    Se coloca al control github esta solicitud
 * 12/01/2022    Se analiza expediente en JIRA
 * 12/01/2022    Se realizan comparaciones con respaldo y SCV, (sin diferencia)
-* 12/01/2022    Se realizan pruebas iniciales
+* 12/01/2022    Se realizan pruebas iniciales, en QA
 * 14/01/2022    Se contruye paquete gc_k_mov_economico_mcr para servir la function tabla
+* 17/01/2022    Se optimiza las funciones de busqueda de atribustos, modalidad y nombre del tomador
                 
 ### Objetos Relacionados
 - dc_k_terceros_trn, Paquete de Procesamiento de datos de terceros

@@ -4,6 +4,8 @@ create or replace PACKAGE BODY gc_k_mov_economico_mcr AS
 	g_cod_cia       				a1001331.cod_cia%type;
 	g_tip_docum     				a1001331.tip_docum%type;
 	g_cod_docum     				a1001331.cod_docum%TYPE;
+	g_nom_completo					VARCHAR2(255);
+	g_cod_subproducto				VARCHAR2(50);
 	g_reg 							typ_reg_me;
 	--
 	g_tabla_list_mv    			typ_tab_lista_me := typ_tab_lista_me();
@@ -199,10 +201,10 @@ create or replace PACKAGE BODY gc_k_mov_economico_mcr AS
 		--
 		l_reg.cod_tipo_identificacion     := g_tip_docum;
     	l_reg.num_identificacion          := g_cod_docum;
-		l_reg.nom_completo                := f_datos_asegurado; 
+		l_reg.nom_completo                := g_nom_completo; 
 		l_reg.cod_tipo_producto           := p_cod_ramo;
 		l_reg.num_referencia              := p_num_poliza ||'-'||to_char(p_num_spto);
-		l_reg.cod_subproducto             := f_modalidad( p_num_poliza => p_num_poliza );
+		l_reg.cod_subproducto             := g_cod_subproducto;
 		l_reg.cod_tipo_movimiento		  := p_tip_spto;
 		--
 		FOR v IN c_recibos LOOP
@@ -253,6 +255,7 @@ create or replace PACKAGE BODY gc_k_mov_economico_mcr AS
 		FOR v IN c_polizas LOOP
 			-- 
 			-- agreamos al vector de polizas
+		    g_cod_subproducto	:= f_modalidad( p_num_poliza => v.num_poliza );
 			p_agregar_recibos( 	p_cod_ramo   => v.cod_ramo,
 								p_num_poliza => v.num_poliza,
 								p_num_spto   => v.num_spto,
@@ -277,9 +280,10 @@ create or replace PACKAGE BODY gc_k_mov_economico_mcr AS
 		--
 		p_eliminar_registros;
 	  	--
-		g_cod_cia    := p_cod_cia;
-		g_tip_docum  := p_tip_docum;
-		g_cod_docum  := p_cod_docum;
+		g_cod_cia    		:= p_cod_cia;
+		g_tip_docum  		:= p_tip_docum;
+		g_cod_docum  		:= p_cod_docum;
+		g_nom_completo		:= f_datos_asegurado;
 		--
 		p_agregar_polizas;
 		--
