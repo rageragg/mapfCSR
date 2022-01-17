@@ -90,11 +90,12 @@ create or replace PACKAGE BODY gc_k_mov_economico_mcr AS
     END f_modalidad;
 	--
 	-- datos de tesoreria
-	PROCEDURE p_datos_tesoreria( p_cod_ramo   		a2000030.cod_ramo%type,
-	                             p_num_bloque 		a5020301.num_bloque_tes%type,
-	                             p_fec_movimiento 	OUT DATE,
-								 p_mon_creditos		OUT NUMBER,
-								 p_mon_debitos		OUT NUMBER
+	PROCEDURE p_datos_tesoreria( p_cod_ramo   			a2000030.cod_ramo%type,
+	                             p_num_bloque 			a5020301.num_bloque_tes%type,
+	                             p_fec_movimiento 		OUT DATE,
+								 p_mon_creditos			OUT NUMBER,
+								 p_mon_debitos			OUT NUMBER,
+								 p_cod_usuario_registo	OUT VARCHAR2
 								) IS 
 		--
 		-- datos de tesoreria
@@ -118,7 +119,9 @@ create or replace PACKAGE BODY gc_k_mov_economico_mcr AS
 		FETCH c_tesoreria INTO l_reg;
 		IF c_tesoreria%FOUND THEN
 			--
-			p_fec_movimiento := l_reg.fec_asto;
+			p_fec_movimiento 		:= l_reg.fec_asto;
+			p_cod_usuario_registo	:= l_reg.cod_cajero;
+			--
 			IF l_reg.tip_imp = 'H' THEN 
 				p_mon_creditos := l_reg.imp_mon_pais;
 			ELSIF l_reg.tip_imp = 'D' THEN
@@ -171,10 +174,11 @@ create or replace PACKAGE BODY gc_k_mov_economico_mcr AS
 									p_tip_spto   a2000030.tip_spto%type  
 		                        )	IS  
 		--
-		l_reg 				typ_reg_me;
-		l_fec_movimiento 	DATE;
-		l_mon_creditos		NUMBER;
-		l_mon_debitos		NUMBER;
+		l_reg 					typ_reg_me;
+		l_fec_movimiento 		DATE;
+		l_mon_creditos			NUMBER;
+		l_mon_debitos			NUMBER;
+		l_cod_usuario_registo	VARCHAR2(8);
 		--
 		-- seleccionamos los recibos
 		CURSOR c_recibos IS
@@ -220,12 +224,20 @@ create or replace PACKAGE BODY gc_k_mov_economico_mcr AS
 				l_reg.mon_tipo_cambio        		:= h.val_cambio;
 				--
 				-- datos de tesoreria
-				p_datos_tesoreria( p_cod_ramo, h.num_bloque_tes, l_fec_movimiento, l_mon_creditos, l_mon_debitos );
+				p_datos_tesoreria( p_cod_ramo, 
+				                   h.num_bloque_tes, 
+								   l_fec_movimiento, 
+								   l_mon_creditos, 
+								   l_mon_debitos,
+								   l_cod_usuario_registo
+								 );
 				l_reg.fec_movimiento 			:= l_fec_movimiento;
 				l_reg.mon_creditos   			:= l_mon_creditos;
 				l_reg.mon_debitos    			:= l_mon_debitos;
+				l_reg.cod_usuario_registo		:= l_cod_usuario_registo;
 				--					
 				p_agregar_registro( l_reg );
+				--
 			END LOOP;
 			--
     	END LOOP;

@@ -34,7 +34,7 @@ create or replace PACKAGE gc_k_mov_economico_mcr AS
 		mon_tipo_cambio             a5020301.val_cambio%TYPE DEFAULT 0,
 		mon_debitos                 NUMBER(15,2)  DEFAULT 0,
 		mon_creditos                NUMBER(15,2)  DEFAULT 0,
-		cod_usuario_registo         INTEGER,
+		cod_usuario_registo         VARCHAR2(8),
 		fec_registro                DATE,
 		--
 		num_identificacion_originario   VARCHAR2(255),
