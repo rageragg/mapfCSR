@@ -7,6 +7,7 @@
 * 14/01/2022    Se contruye paquete gc_k_mov_economico_mcr para servir la function tabla
 * 17/01/2022    Se optimiza las funciones de busqueda de atribustos, modalidad y nombre del tomador, se agrega cajero
 * 18/01/2022    Se agrega los siniestros
+* 18/01/20200   Se realiza la entrega
                 
 ### Objetos Relacionados
 - dc_k_terceros_trn, Paquete de Procesamiento de datos de terceros

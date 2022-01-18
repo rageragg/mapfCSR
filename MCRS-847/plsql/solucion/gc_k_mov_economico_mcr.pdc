@@ -1,0 +1,6 @@
+@gc_k_mov_economico_mcr.sps
+@gc_k_mov_economico_mcr.spb
+
+--
+DROP   PUBLIC  SYNONYM gc_k_mov_economico_mcr;
+CREATE PUBLIC  SYNONYM gc_k_mov_economico_mcr FOR gc_k_mov_economico_mcr;
