@@ -25,7 +25,7 @@ create or replace PACKAGE gc_k_mov_economico_mcr AS
 		fec_movimiento              DATE,
 		cod_tipo_movimiento         a2000030.tip_spto%TYPE,
 		cod_oficina                 INTEGER,
-		cod_canal                   SMALLINT,
+		cod_canal                   VARCHAR2(2),
 		des_canal                   VARCHAR2(50),
 		cod_moneda                  a2990700.cod_mon%TYPE,
 		cod_moneda_producto         a2990700.cod_mon%TYPE,
@@ -43,10 +43,11 @@ create or replace PACKAGE gc_k_mov_economico_mcr AS
 		des_nombre_beneficiario         VARCHAR2(255),
 		num_cuenta_origen               VARCHAR2(22),
 		num_cuenta_destino              VARCHAR2(22),
-		cod_pais_origen                 INTEGER,
-		cod_pais_destino                INTEGER,
-		cod_banco_origen                INTEGER,
-		cod_banco_destino               INTEGER
+		cod_pais_origen                 VARCHAR2(3)	DEFAULT 'CRI',
+		cod_pais_destino                VARCHAR2(3) DEFAULT 'CRI',
+		cod_banco_origen                VARCHAR2(5),
+		cod_banco_destino               VARCHAR2(5),
+		tip_pago                        CHAR(3)
 	);
 
 	TYPE typ_tab_lista_me IS TABLE OF typ_reg_me;

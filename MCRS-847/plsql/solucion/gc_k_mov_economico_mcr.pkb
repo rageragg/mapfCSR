@@ -39,6 +39,28 @@ create or replace PACKAGE BODY gc_k_mov_economico_mcr AS
 		--
     END p_tratar_json;
 	--
+	-- busque de datos catalogos
+	FUNCTION fp_desc_catalogo( p_campo VARCHAR2, p_valor VARCHAR2, p_idioma VARCHAR2 ) RETURN VARCHAR2 IS 
+		-- 
+		l_nom_valor g1010031.nom_valor%TYPE;
+		--
+	BEGIN 
+		--
+		SELECT nom_valor 
+		  INTO l_nom_valor
+		  FROM g1010031 
+		 WHERE cod_campo  = p_campo 
+		   AND cod_valor  = p_valor
+		   AND cod_idioma = 'ES';
+		-- 
+		RETURN l_nom_valor;
+		--
+		EXCEPTION 
+			WHEN OTHERS THEN 
+				RETURN NULL;
+		--		   
+	END fp_desc_catalogo;
+	--
 	-- agregar registro
 	PROCEDURE p_agregar_registro( p_reg typ_reg_me ) IS 
 	BEGIN 
@@ -90,13 +112,25 @@ create or replace PACKAGE BODY gc_k_mov_economico_mcr AS
     END f_modalidad;
 	--
 	-- datos de tesoreria
-	PROCEDURE p_datos_tesoreria( p_cod_ramo   			a2000030.cod_ramo%type,
-	                             p_num_bloque 			a5020301.num_bloque_tes%type,
-	                             p_fec_movimiento 		OUT DATE,
-								 p_mon_creditos			OUT NUMBER,
-								 p_mon_debitos			OUT NUMBER,
-								 p_cod_usuario_registo	OUT VARCHAR2
+	PROCEDURE p_datos_tesoreria( p_cod_ramo   				a2000030.cod_ramo%type,
+	                             p_num_bloque 				a5020301.num_bloque_tes%type,
+	                             p_fec_movimiento 			OUT DATE,
+								 p_mon_creditos				OUT NUMBER,
+								 p_mon_debitos				OUT NUMBER,
+								 p_cod_usuario_registo		OUT VARCHAR2,
+								 p_fec_registro         	OUT DATE,
+								 p_des_nombre_originario	OUT VARCHAR2,
+								 p_des_nombre_beneficiario	OUT VARCHAR2,
+								 p_num_cuenta_origen		OUT VARCHAR2,
+								 p_num_cuenta_destino		OUT VARCHAR2,
+								 p_cod_banco_origen			OUT VARCHAR2,
+								 p_cod_banco_destino        OUT VARCHAR2,
+								 p_cod_canal                OUT VARCHAR2,
+								 p_des_canal                OUT VARCHAR2,
+								 p_tip_pago					OUT VARCHAR2
 								) IS 
+		--
+		l_tip_pago	CHAR(3);						
 		--
 		-- datos de tesoreria
 		CURSOR c_tesoreria IS 
@@ -108,7 +142,19 @@ create or replace PACKAGE BODY gc_k_mov_economico_mcr AS
 	           AND cod_docum      = g_cod_docum
 	           AND num_bloque_tes = p_num_bloque;
 		--
-		l_reg c_tesoreria%ROWTYPE;
+		-- datos de	traspasos de tesoreria
+		CURSOR c_traspasos( p_fec_asto a5020034.fec_asto%TYPE,
+		                    p_num_asto a5020034.num_asto%TYPE 
+		                  ) IS 
+			SELECT *
+			  FROM a5020034
+			 WHERE cod_cia 					= g_cod_cia
+			   AND fec_asto     			= p_fec_asto  
+			   AND num_asto     			= p_num_asto   
+			   AND num_bloque_tes_origen	= p_num_bloque;
+		--
+		l_reg_tes c_tesoreria%ROWTYPE;
+		l_reg_trs c_traspasos%ROWTYPE;
 		--
 	BEGIN 
 		--
@@ -116,20 +162,53 @@ create or replace PACKAGE BODY gc_k_mov_economico_mcr AS
 		p_mon_debitos  := 0;
 		--
 		OPEN c_tesoreria;
-		FETCH c_tesoreria INTO l_reg;
+		FETCH c_tesoreria INTO l_reg_tes;
 		IF c_tesoreria%FOUND THEN
 			--
-			p_fec_movimiento 		:= l_reg.fec_asto;
-			p_cod_usuario_registo	:= l_reg.cod_cajero;
+			p_fec_movimiento 		:= l_reg_tes.fec_asto;
+			p_cod_usuario_registo	:= l_reg_tes.cod_cajero;
+			p_fec_registro          := l_reg_tes.fec_actu;
+			p_des_nombre_originario	:= l_reg_tes.nom_movim;
+			p_cod_canal				:= l_reg_tes.tip_actu;
+			p_des_canal             := fp_desc_catalogo( 'TIP_ACTU', p_cod_canal, 'ES' ); 
 			--
-			IF l_reg.tip_imp = 'H' THEN 
-				p_mon_creditos := l_reg.imp_mon_pais;
-			ELSIF l_reg.tip_imp = 'D' THEN
-			 	p_mon_debitos := l_reg.imp_mon_pais;
+			IF l_reg_tes.tip_imp = 'H' THEN 
+				p_mon_creditos := l_reg_tes.imp_mon_pais;
+			ELSIF l_reg_tes.tip_imp = 'D' THEN
+			 	p_mon_debitos := l_reg_tes.imp_mon_pais;
 			END IF;
 			--
+			IF l_reg_tes.num_cheque IS NOT NULL THEN
+			    l_tip_pago		     := 'CHQ';
+				p_cod_banco_origen   := l_reg_tes.cod_entidad_cheque;
+			ELSIF l_reg_tes.num_tarjeta IS NOT NULL THEN 
+			    l_tip_pago		     := 'TAR';
+				p_num_cuenta_origen := l_reg_tes.num_tarjeta; 
+			ELSE
+				p_num_cuenta_origen := NULL;	
+			END IF;	
+			p_cod_banco_destino	 := l_reg_tes.cod_entidad;
+			p_num_cuenta_destino := l_reg_tes.cod_cta_simp;
+			--
 		END IF;
-		CLOSE c_tesoreria;
+		CLOSE c_tesoreria; 
+		--
+		OPEN c_traspasos(l_reg_tes.fec_asto, l_reg_tes.num_asto);
+		FETCH c_traspasos INTO l_reg_trs;
+		IF c_traspasos%FOUND THEN
+			--
+			IF l_tip_pago = 'CHQ' THEN
+				p_num_cuenta_origen  	  := nvl( p_num_cuenta_origen, l_reg_trs.cta_cte_cheque ); 
+				p_des_nombre_beneficiario := nvl( p_des_nombre_beneficiario, l_reg_trs.nom_tercero_giro );
+			ELSIF l_tip_pago = 'TAR' THEN
+				p_num_cuenta_origen := nvl( p_num_cuenta_origen, l_reg_trs.num_tarjeta );
+			END IF;	
+			p_num_cuenta_destino := nvl( p_num_cuenta_destino, l_reg_trs.cod_cta_simp ); 
+			--
+		END IF;
+		CLOSE c_traspasos;
+		--
+		p_tip_pago := l_tip_pago;
 		--
 		EXCEPTION
 			WHEN NO_DATA_FOUND THEN
@@ -175,10 +254,20 @@ create or replace PACKAGE BODY gc_k_mov_economico_mcr AS
 		                        )	IS  
 		--
 		l_reg 					typ_reg_me;
-		l_fec_movimiento 		DATE;
-		l_mon_creditos			NUMBER;
-		l_mon_debitos			NUMBER;
-		l_cod_usuario_registo	VARCHAR2(8);
+		l_fec_movimiento 			DATE;
+		l_mon_creditos				NUMBER;
+		l_mon_debitos				NUMBER;
+		l_cod_usuario_registo		VARCHAR2(8);
+		l_fec_registro				DATE;
+		l_des_nombre_originario		VARCHAR2(255);
+		l_des_nombre_beneficiario	VARCHAR2(255);
+		l_cod_banco_origen			VARCHAR2(5);
+		l_cod_banco_destino			VARCHAR2(5);
+		l_num_cuenta_origen			VARCHAR2(22);
+		l_num_cuenta_destino		VARCHAR2(22);
+		l_cod_canal                 VARCHAR2(2);
+		l_des_canal                 VARCHAR2(50);
+		l_tip_pago					CHAR(3);
 		--
 		-- seleccionamos los recibos
 		CURSOR c_recibos IS
@@ -215,7 +304,7 @@ create or replace PACKAGE BODY gc_k_mov_economico_mcr AS
 			--
 			l_reg.cod_moneda  			:= v.cod_mon;
 			l_reg.cod_moneda_producto	:= v.cod_mon;
-			p_agregar_registro( l_reg );
+			l_reg.cod_oficina			:= v.cod_nivel3;
 			--
 			FOR h IN c_historico( v.num_recibo ) LOOP
 				--
@@ -223,18 +312,38 @@ create or replace PACKAGE BODY gc_k_mov_economico_mcr AS
 				l_reg.ind_origen_transaccion        := h.tip_cobro;
 				l_reg.mon_tipo_cambio        		:= h.val_cambio;
 				--
-				-- datos de tesoreria
+				-- datos de tesoreria 
 				p_datos_tesoreria( p_cod_ramo, 
 				                   h.num_bloque_tes, 
 								   l_fec_movimiento, 
 								   l_mon_creditos, 
 								   l_mon_debitos,
-								   l_cod_usuario_registo
+								   l_cod_usuario_registo,
+								   l_fec_registro,
+								   l_des_nombre_originario,
+								   l_des_nombre_beneficiario,
+								   l_num_cuenta_origen,
+								   l_num_cuenta_destino,
+								   l_cod_banco_origen,
+								   l_cod_banco_destino,
+								   l_cod_canal,
+								   l_des_canal,
+								   l_tip_pago
 								 );
 				l_reg.fec_movimiento 			:= l_fec_movimiento;
 				l_reg.mon_creditos   			:= l_mon_creditos;
 				l_reg.mon_debitos    			:= l_mon_debitos;
 				l_reg.cod_usuario_registo		:= l_cod_usuario_registo;
+				l_reg.fec_registro 				:= l_fec_registro;
+				l_reg.des_nombre_originario     := l_des_nombre_originario;
+				l_reg.des_nombre_beneficiario	:= l_des_nombre_beneficiario;
+				l_reg.cod_banco_origen			:= l_cod_banco_origen;
+				l_reg.cod_banco_destino			:= l_cod_banco_destino;
+				l_reg.num_cuenta_origen			:= l_num_cuenta_origen;
+				l_REG.num_cuenta_destino		:= l_num_cuenta_destino;
+				l_reg.cod_canal					:= l_cod_canal;
+				l_reg.des_canal					:= l_des_canal;
+				l_reg.tip_pago					:= l_tip_pago;
 				--					
 				p_agregar_registro( l_reg );
 				--
@@ -247,6 +356,51 @@ create or replace PACKAGE BODY gc_k_mov_economico_mcr AS
 				pp_establecer_error;	
 		--
 	END p_agregar_recibos;
+	--
+	-- agregamos siniestros
+	PROCEDURE p_agregar_siniestros(	p_cod_ramo   a2000030.cod_ramo%type,
+		            				p_num_poliza a2990700.num_poliza%type,
+                                	p_num_spto   a2990700.num_spto%type
+								  ) IS 
+		--
+		-- seleccionamos las polizas con siniestros
+		CURSOR c_siniestros IS 
+			SELECT a.*,
+                   b.num_ord_pago 
+			  FROM a7000900 a,
+			       a3001700 b  
+			 WHERE b.cod_cia    = a.cod_cia
+			   AND b.cod_ramo   = a.cod_ramo
+			   AND b.num_sini   = a.num_sini
+			   AND a.cod_cia    = g_cod_cia
+			   AND a.cod_ramo   = p_cod_ramo
+			   AND a.num_poliza = p_num_poliza
+			   AND a.num_spto   = p_num_spto;
+		--
+		-- ordenes de pago de cada siniestro
+		CURSOR c_ord_pagos( p_num_ord_pago a5021604.num_ord_pago%TYPE ) IS
+			SELECT * 
+  			  FROM a5021604
+ 			 WHERE cod_cia      = g_cod_cia
+			   AND num_ord_pago = p_num_ord_pago
+               AND tip_estado   = 'T';
+		--
+		-- detalles de pagos (historial de cheques)
+		CURSOR c_cheques IS 
+			SELECT *
+			  FROM a5021606	
+			 WHERE cod_cia = g_cod_cia 
+			   AND      	   
+
+    BEGIN 
+		--
+		NULL;
+		--
+		EXCEPTION
+			WHEN OTHERS THEN
+				pp_establecer_error;	
+		--		
+	END p_agregar_siniestros;								  
 	--
 	-- cargamos las polizas y las colocamos en un vector
 	PROCEDURE p_agregar_polizas IS
@@ -273,6 +427,11 @@ create or replace PACKAGE BODY gc_k_mov_economico_mcr AS
 								p_num_spto   => v.num_spto,
 								p_tip_spto   => v.tip_spto
 							);
+			-- 				
+			p_agregar_siniestros( p_cod_ramo   => v.cod_ramo,
+								  p_num_poliza   => v.num_poliza,
+								  p_num_spto   => v.num_spto
+								);				
 			--									
 		END LOOP;
 			--
