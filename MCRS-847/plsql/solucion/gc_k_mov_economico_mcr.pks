@@ -30,7 +30,7 @@ create or replace PACKAGE gc_k_mov_economico_mcr AS
 		cod_moneda                  a2990700.cod_mon%TYPE,
 		cod_moneda_producto         a2990700.cod_mon%TYPE,
 		ind_naturaleza_transaccion  CHAR(1)       DEFAULT 'O',  
-		ind_origen_transaccion      a5020301.tip_cobro%TYPE,                  -- tipo cobro
+		ind_origen_transaccion      VARCHAR2(20),                  -- tipo cobro
 		mon_tipo_cambio             a5020301.val_cambio%TYPE DEFAULT 0,
 		mon_debitos                 NUMBER(15,2)  DEFAULT 0,
 		mon_creditos                NUMBER(15,2)  DEFAULT 0,

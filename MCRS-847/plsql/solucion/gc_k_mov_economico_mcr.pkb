@@ -112,8 +112,8 @@ create or replace PACKAGE BODY gc_k_mov_economico_mcr AS
     END f_modalidad;
 	--
 	-- datos de tesoreria
-	PROCEDURE p_datos_tesoreria( p_cod_ramo   				a2000030.cod_ramo%type,
-	                             p_num_bloque 				a5020301.num_bloque_tes%type,
+	PROCEDURE p_datos_tesoreria( p_cod_ramo   				a2000030.cod_ramo%TYPE,
+	                             p_num_bloque 				a5020301.num_bloque_tes%TYPE,
 	                             p_fec_movimiento 			OUT DATE,
 								 p_mon_creditos				OUT NUMBER,
 								 p_mon_debitos				OUT NUMBER,
@@ -127,7 +127,9 @@ create or replace PACKAGE BODY gc_k_mov_economico_mcr AS
 								 p_cod_banco_destino        OUT VARCHAR2,
 								 p_cod_canal                OUT VARCHAR2,
 								 p_des_canal                OUT VARCHAR2,
-								 p_tip_pago					OUT VARCHAR2
+								 p_tip_pago					OUT VARCHAR2,
+								 p_origen_transaccion       IN VARCHAR2 DEFAULT 'RECIBO',
+								 p_num_sini					IN a7000900.num_sini%TYPE
 								) IS 
 		--
 		l_tip_pago	CHAR(3);						
@@ -140,7 +142,15 @@ create or replace PACKAGE BODY gc_k_mov_economico_mcr AS
 	           AND cod_ramo       = p_cod_ramo
 	           AND tip_docum      = g_tip_docum
 	           AND cod_docum      = g_cod_docum
-	           AND num_bloque_tes = p_num_bloque;
+	           AND num_bloque_tes = p_num_bloque
+			   AND p_origen_transaccion = 'RECIBO'
+			UNION 
+			SELECT * 
+	          FROM v5021600_1900
+	         WHERE cod_cia        		= g_cod_cia
+	           AND num_bloque_tes 		= p_num_bloque
+			   AND num_sini       		= p_num_sini
+			   AND p_origen_transaccion = 'SINIESTRO';
 		--
 		-- datos de	traspasos de tesoreria
 		CURSOR c_traspasos( p_fec_asto a5020034.fec_asto%TYPE,
@@ -309,7 +319,7 @@ create or replace PACKAGE BODY gc_k_mov_economico_mcr AS
 			FOR h IN c_historico( v.num_recibo ) LOOP
 				--
 			    l_reg.num_identificacion_originario := h.num_bloque_tes;
-				l_reg.ind_origen_transaccion        := h.tip_cobro;
+				l_reg.ind_origen_transaccion        := 'RECIBO';
 				l_reg.mon_tipo_cambio        		:= h.val_cambio;
 				--
 				-- datos de tesoreria 
@@ -328,7 +338,9 @@ create or replace PACKAGE BODY gc_k_mov_economico_mcr AS
 								   l_cod_banco_destino,
 								   l_cod_canal,
 								   l_des_canal,
-								   l_tip_pago
+								   l_tip_pago,
+								   'RECIBO',
+								   NULL
 								 );
 				l_reg.fec_movimiento 			:= l_fec_movimiento;
 				l_reg.mon_creditos   			:= l_mon_creditos;
@@ -360,8 +372,25 @@ create or replace PACKAGE BODY gc_k_mov_economico_mcr AS
 	-- agregamos siniestros
 	PROCEDURE p_agregar_siniestros(	p_cod_ramo   a2000030.cod_ramo%type,
 		            				p_num_poliza a2990700.num_poliza%type,
-                                	p_num_spto   a2990700.num_spto%type
+                                	p_num_spto   a2990700.num_spto%type,
+									p_tip_spto   a2000030.tip_spto%type 
 								  ) IS 
+		--
+		l_reg 						typ_reg_me;
+		l_fec_movimiento 			DATE;
+		l_mon_creditos				NUMBER;
+		l_mon_debitos				NUMBER;
+		l_cod_usuario_registo		VARCHAR2(8);
+		l_fec_registro				DATE;
+		l_des_nombre_originario		VARCHAR2(255);
+		l_des_nombre_beneficiario	VARCHAR2(255);
+		l_cod_banco_origen			VARCHAR2(5);
+		l_cod_banco_destino			VARCHAR2(5);
+		l_num_cuenta_origen			VARCHAR2(22);
+		l_num_cuenta_destino		VARCHAR2(22);
+		l_cod_canal                 VARCHAR2(2);
+		l_des_canal                 VARCHAR2(50);
+		l_tip_pago					CHAR(3);
 		--
 		-- seleccionamos las polizas con siniestros
 		CURSOR c_siniestros IS 
@@ -386,15 +415,77 @@ create or replace PACKAGE BODY gc_k_mov_economico_mcr AS
                AND tip_estado   = 'T';
 		--
 		-- detalles de pagos (historial de cheques)
-		CURSOR c_cheques IS 
+		CURSOR c_cheques( p_num_clave a5021606.num_clave%TYPE ) IS 
 			SELECT *
 			  FROM a5021606	
-			 WHERE cod_cia = g_cod_cia 
-			   AND      	   
-
+			 WHERE cod_cia 		= g_cod_cia 
+			   AND num_clave    = p_num_clave;	   
+		--
     BEGIN 
 		--
-		NULL;
+		l_reg.cod_tipo_identificacion     := g_tip_docum;
+    	l_reg.num_identificacion          := g_cod_docum;
+		l_reg.nom_completo                := g_nom_completo; 
+		l_reg.cod_tipo_producto           := p_cod_ramo;
+		l_reg.num_referencia              := p_num_poliza ||'-'||to_char(p_num_spto);
+		l_reg.cod_subproducto             := g_cod_subproducto;
+		l_reg.cod_tipo_movimiento		  := p_tip_spto;
+		--
+		FOR r_sini IN c_siniestros LOOP  
+			--
+			FOR r_ord IN c_ord_pagos( r_sini.num_ord_pago ) LOOP
+				--
+				FOR r_chq IN c_cheques( r_ord.num_clave ) LOOP
+					--
+					l_reg.cod_moneda  					:= r_chq.cod_mon_pago;
+					l_reg.cod_moneda_producto			:= r_chq.cod_mon_pago;
+					l_reg.cod_oficina					:= r_chq.cod_nivel3_pago; 
+					l_reg.num_identificacion_originario := r_chq.num_bloque_tes;
+					l_reg.ind_origen_transaccion        := 'SINIESTRO';
+					l_reg.mon_tipo_cambio        		:= r_chq.val_cambio;
+					--
+					-- datos de tesoreria 
+					p_datos_tesoreria( 	p_cod_ramo, 
+										r_chq.num_bloque_tes, 
+										l_fec_movimiento, 
+										l_mon_creditos, 
+										l_mon_debitos,
+										l_cod_usuario_registo,
+										l_fec_registro,
+										l_des_nombre_originario,
+										l_des_nombre_beneficiario,
+										l_num_cuenta_origen,
+										l_num_cuenta_destino,
+										l_cod_banco_origen,
+										l_cod_banco_destino,
+										l_cod_canal,
+										l_des_canal,
+										l_tip_pago,
+										'SINIESTRO',
+										r_sini.num_sini
+									  );
+					l_reg.fec_movimiento 			:= l_fec_movimiento;
+					l_reg.mon_creditos   			:= l_mon_creditos;
+					l_reg.mon_debitos    			:= l_mon_debitos;
+					l_reg.cod_usuario_registo		:= l_cod_usuario_registo;
+					l_reg.fec_registro 				:= l_fec_registro;
+					l_reg.des_nombre_originario     := l_des_nombre_originario;
+					l_reg.des_nombre_beneficiario	:= l_des_nombre_beneficiario;
+					l_reg.cod_banco_origen			:= l_cod_banco_origen;
+					l_reg.cod_banco_destino			:= l_cod_banco_destino;
+					l_reg.num_cuenta_origen			:= l_num_cuenta_origen;
+					l_REG.num_cuenta_destino		:= l_num_cuenta_destino;
+					l_reg.cod_canal					:= l_cod_canal;
+					l_reg.des_canal					:= l_des_canal;
+					l_reg.tip_pago					:= 'XXX';
+					--					
+					p_agregar_registro( l_reg );
+					--
+				END LOOP;
+				-- 
+			END LOOP;
+			--
+		END LOOP;
 		--
 		EXCEPTION
 			WHEN OTHERS THEN
@@ -429,8 +520,9 @@ create or replace PACKAGE BODY gc_k_mov_economico_mcr AS
 							);
 			-- 				
 			p_agregar_siniestros( p_cod_ramo   => v.cod_ramo,
-								  p_num_poliza   => v.num_poliza,
-								  p_num_spto   => v.num_spto
+								  p_num_poliza => v.num_poliza,
+								  p_num_spto   => v.num_spto,
+								  p_tip_spto   => v.tip_spto
 								);				
 			--									
 		END LOOP;
