@@ -2,6 +2,7 @@
 ### Fecha       Descripcion
 * 20/01/2022    Se coloca al control github esta solicitud
 * 20/02/2022    Se analizan los objetos, de DESARROLLO, QA y REPLICA
+* 20/02/2022    Se envia email, pidiendo autorizacion para migar de QA a DESARROLLO
                 
 ### Objetos Relacionados
 - **dc_k_crea_terceros_web_mcr**, Paquete de Procesamiento de datos de la solicitud
@@ -13,6 +14,7 @@
 - **JSON_PRINTER**, realiza la impresion transformacion del JSON
 - **JSON_EXT**, paquete
 - **JSON_PARSER**, paquete
+- **JSON_VALUE_WEB**, tipo
 
 ### Casos Relacionados
 - MCRS-589, Error en los Objetos para el manejo JSON
