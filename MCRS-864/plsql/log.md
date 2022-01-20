@@ -1,8 +1,9 @@
 # Registro de Actividades Resaltantes
 ### Fecha       Descripcion
 * 20/01/2022    Se coloca al control github esta solicitud
-* 20/02/2022    Se analizan los objetos, de DESARROLLO, QA y REPLICA
-* 20/02/2022    Se envia email, pidiendo autorizacion para migar de QA a DESARROLLO
+* 20/01/2022    Se analizan los objetos, de DESARROLLO, QA y REPLICA
+* 20/01/2022    Se envia email, pidiendo autorizacion para migar de QA a DESARROLLO
+* 20/01/2022    Se realiza la migracion y se crea los scripts de creaciom, se realizan pruebas y se hace la entrega
                 
 ### Objetos Relacionados
 - **dc_k_crea_terceros_web_mcr**, Paquete de Procesamiento de datos de la solicitud
@@ -15,6 +16,8 @@
 - **JSON_EXT**, paquete
 - **JSON_PARSER**, paquete
 - **JSON_VALUE_WEB**, tipo
+- **X2000100_TER**, tabla
+- **dc_f_varchar_to_number**, funcion
 
 ### Casos Relacionados
 - MCRS-589, Error en los Objetos para el manejo JSON

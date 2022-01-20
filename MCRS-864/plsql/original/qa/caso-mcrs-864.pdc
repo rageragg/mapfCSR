@@ -1,0 +1,39 @@
+@crear_tabla_X2000100_TER.sql
+@dc_f_varchar_to_number.sp
+
+@json.sql
+@json_body.sql
+@json_value_web.sql
+@json_value_web_body.sql
+@json_value_array.sql
+@json_list.sql
+@json_list_body.sql
+
+@json_printer.sps
+@json_printer.spb
+@json_parser.sps
+@json_parser.spb
+@json_ext.sps
+@json_ext.spb
+
+@dc_k_util_json_web.sps
+@dc_k_util_json_web.spb
+@dc_k_crea_terceros_web_mcr.sps
+@dc_k_crea_terceros_web_mcr.spb
+
+ALTER PACKAGE "TRON2000"."JSON" COMPILE BODY;
+ALTER PACKAGE "TRON2000"."JSON_LIST" COMPILE BODY;
+ALTER PACKAGE "TRON2000"."JSON_VALUE_WEB" COMPILE BODY;
+ALTER PACKAGE "TRON2000"."JSON_VALUE_ARRAY" COMPILE BODY;
+
+ALTER PACKAGE "TRON2000"."JSON_EXT" COMPILE;
+ALTER PACKAGE "TRON2000"."JSON_PRINTER" COMPILE;
+ALTER PACKAGE "TRON2000"."JSON_PARSER" COMPILE;
+ALTER PACKAGE "TRON2000"."DC_K_UTIL_JSON_WEB" COMPILE;
+ALTER PACKAGE "TRON2000"."DC_K_CREA_TERCEROS_WEB_MCR" COMPILE;
+
+ALTER PACKAGE "TRON2000"."JSON_EXT" COMPILE BODY;
+ALTER PACKAGE "TRON2000"."JSON_PRINTER" COMPILE BODY;
+ALTER PACKAGE "TRON2000"."DC_K_UTIL_JSON_WEB" COMPILE BODY;
+ALTER PACKAGE "TRON2000"."JSON_PARSER" COMPILE BODY;
+ALTER PACKAGE "TRON2000"."DC_K_CREA_TERCEROS_WEB_MCR" COMPILE BODY;

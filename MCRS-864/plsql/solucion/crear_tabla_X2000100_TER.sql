@@ -1,0 +1,55 @@
+CREATE TABLE "TRON2000"."X2000100_TER" (
+    "COD_CIA"      NUMBER(2, 0)        NOT NULL ENABLE,
+    "TIP_DOCUM"    VARCHAR2(3 BYTE)    NOT NULL ENABLE,
+    "COD_DOCUM"    VARCHAR2(20 BYTE)   NOT NULL ENABLE,
+    "COD_CAMPO"    VARCHAR2(30 BYTE)   NOT NULL ENABLE,
+    "NUM_SECU"     NUMBER(5, 0)        NOT NULL ENABLE,
+    "VAL_CAMPO"    VARCHAR2(80 BYTE),
+    "TXT_CAMPO"    VARCHAR2(80 BYTE),
+    "TXT_CAMPO1"   VARCHAR2(30 BYTE),
+    "TXT_CAMPO2"   VARCHAR2(30 BYTE),
+    "MCA_VALIDO"   VARCHAR2(1 BYTE),
+    "TXT_MENSAJE"  VARCHAR2(100 BYTE),
+    "SESSION_ID"   VARCHAR2(500 BYTE),
+    "COD_USR"      VARCHAR2(8 BYTE),
+    "FEC_ACTU"     DATE,
+    CONSTRAINT "PK_X2000100_TER" PRIMARY KEY ( "COD_CIA",
+                                               "TIP_DOCUM",
+                                               "COD_DOCUM",
+                                               "COD_CAMPO",
+                                               "NUM_SECU" )
+        USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS
+            STORAGE ( INITIAL 65536 
+                      NEXT 1048576 
+                      MINEXTENTS 1 
+                      MAXEXTENTS 2147483645 
+                      PCTINCREASE 0 
+                      FREELISTS 1 
+                      FREELIST GROUPS 1 
+                      BUFFER_POOL DEFAULT 
+                      FLASH_CACHE DEFAULT 
+                      CELL_FLASH_CACHE DEFAULT 
+                    )
+        TABLESPACE "DATOS"
+    ENABLE
+)
+SEGMENT CREATION IMMEDIATE
+PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 NOCOMPRESS LOGGING
+    STORAGE ( INITIAL 65536 
+              NEXT 1048576 
+              MINEXTENTS 1 
+              MAXEXTENTS 2147483645 
+              PCTINCREASE 0 
+              FREELISTS 1 
+              FREELIST GROUPS 1 
+              BUFFER_POOL DEFAULT 
+              FLASH_CACHE DEFAULT 
+              CELL_FLASH_CACHE DEFAULT 
+            )
+TABLESPACE "DATOS";
+
+COMMENT ON TABLE "TRON2000"."X2000100_TER" IS  'Temporal  Creacion de Terceros WEB';
+GRANT DELETE ON "TRON2000"."X2000100_TER" TO PUBLIC;
+GRANT INSERT ON "TRON2000"."X2000100_TER" TO PUBLIC;
+GRANT SELECT ON "TRON2000"."X2000100_TER" TO PUBLIC;
+GRANT UPDATE ON "TRON2000"."X2000100_TER" TO PUBLIC;
