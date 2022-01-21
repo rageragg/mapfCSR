@@ -7,10 +7,12 @@
 * 14/01/2022    Se contruye paquete gc_k_mov_economico_mcr para servir la function tabla
 * 17/01/2022    Se optimiza las funciones de busqueda de atribustos, modalidad y nombre del tomador, se agrega cajero
 * 18/01/2022    Se agrega los siniestros
-* 18/01/20200   Se realiza la entrega
+* 18/01/2022    Se realiza la entrega
+* 20/01/2022    Se incluye parametros de fecha, que aplica filtros sobre las fechas de los movimientos en la vista v5021600_1900
                 
 ### Objetos Relacionados
 - dc_k_terceros_trn, Paquete de Procesamiento de datos de terceros
+- v5021600_1900, vista de movimientos historicos
 - a1001331, tablas de terceros asociados a polizas
 - a2000030, polizas
 - a2990700, recibos asociados a una poliza

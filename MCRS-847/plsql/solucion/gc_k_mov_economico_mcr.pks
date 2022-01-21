@@ -53,9 +53,11 @@ create or replace PACKAGE gc_k_mov_economico_mcr AS
 	TYPE typ_tab_lista_me IS TABLE OF typ_reg_me;
 	--
 	-- lista de movimientos economicos
-	FUNCTION f_list_mov_economico(  p_cod_cia       a1001331.cod_cia%type,
-									p_tip_docum     a1001331.tip_docum%type,
-									p_cod_docum     a1001331.cod_docum%TYPE
+	FUNCTION f_list_mov_economico(  p_cod_cia       IN a1001331.cod_cia%type,
+									p_tip_docum     IN a1001331.tip_docum%type,
+									p_cod_docum     IN a1001331.cod_docum%TYPE,
+									p_fecha_desde	DATE,
+									p_fecha_hasta	DATE
 								) RETURN typ_tab_lista_me  PIPELINED;   
 	--
 	-- lista de movimientos economicos

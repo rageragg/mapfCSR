@@ -4,6 +4,8 @@ create or replace PACKAGE BODY gc_k_mov_economico_mcr AS
 	g_cod_cia       				a1001331.cod_cia%type;
 	g_tip_docum     				a1001331.tip_docum%type;
 	g_cod_docum     				a1001331.cod_docum%TYPE;
+	g_fecha_desde	                DATE;
+	g_fecha_hasta					DATE;
 	g_nom_completo					VARCHAR2(255);
 	g_cod_subproducto				VARCHAR2(50);
 	g_reg 							typ_reg_me;
@@ -29,9 +31,11 @@ create or replace PACKAGE BODY gc_k_mov_economico_mcr AS
     PROCEDURE p_tratar_json( p_json VARCHAR2 ) IS 
     BEGIN
         --
-        g_cod_cia   := json_value(p_json, '$.codcia' );
-        g_tip_docum := json_value(p_json, '$.tipdocum' );
-        g_cod_docum := json_value(p_json, '$.coddocum' );
+        g_cod_cia   	:= json_value(p_json, '$.codcia' );
+        g_tip_docum 	:= json_value(p_json, '$.tipdocum' );
+        g_cod_docum 	:= json_value(p_json, '$.coddocum' );
+		g_fecha_desde 	:= json_value(p_json, '$.fecdesde' );
+		g_fecha_hasta 	:= json_value(p_json, '$.fechasta' );
         --
 		EXCEPTION
 			WHEN OTHERS THEN
@@ -110,123 +114,6 @@ create or replace PACKAGE BODY gc_k_mov_economico_mcr AS
 				pp_establecer_error;
 		--
     END f_modalidad;
-	--
-	-- datos de tesoreria
-	PROCEDURE p_datos_tesoreria( p_cod_ramo   				a2000030.cod_ramo%TYPE,
-	                             p_num_bloque 				a5020301.num_bloque_tes%TYPE,
-	                             p_fec_movimiento 			OUT DATE,
-								 p_mon_creditos				OUT NUMBER,
-								 p_mon_debitos				OUT NUMBER,
-								 p_cod_usuario_registo		OUT VARCHAR2,
-								 p_fec_registro         	OUT DATE,
-								 p_des_nombre_originario	OUT VARCHAR2,
-								 p_des_nombre_beneficiario	OUT VARCHAR2,
-								 p_num_cuenta_origen		OUT VARCHAR2,
-								 p_num_cuenta_destino		OUT VARCHAR2,
-								 p_cod_banco_origen			OUT VARCHAR2,
-								 p_cod_banco_destino        OUT VARCHAR2,
-								 p_cod_canal                OUT VARCHAR2,
-								 p_des_canal                OUT VARCHAR2,
-								 p_tip_pago					OUT VARCHAR2,
-								 p_origen_transaccion       IN VARCHAR2 DEFAULT 'RECIBO',
-								 p_num_sini					IN a7000900.num_sini%TYPE
-								) IS 
-		--
-		l_tip_pago	CHAR(3);						
-		--
-		-- datos de tesoreria
-		CURSOR c_tesoreria IS 
-			SELECT * 
-	          FROM v5021600_1900
-	         WHERE cod_cia        = g_cod_cia
-	           AND cod_ramo       = p_cod_ramo
-	           AND tip_docum      = g_tip_docum
-	           AND cod_docum      = g_cod_docum
-	           AND num_bloque_tes = p_num_bloque
-			   AND p_origen_transaccion = 'RECIBO'
-			UNION 
-			SELECT * 
-	          FROM v5021600_1900
-	         WHERE cod_cia        		= g_cod_cia
-	           AND num_bloque_tes 		= p_num_bloque
-			   AND num_sini       		= p_num_sini
-			   AND p_origen_transaccion = 'SINIESTRO';
-		--
-		-- datos de	traspasos de tesoreria
-		CURSOR c_traspasos( p_fec_asto a5020034.fec_asto%TYPE,
-		                    p_num_asto a5020034.num_asto%TYPE 
-		                  ) IS 
-			SELECT *
-			  FROM a5020034
-			 WHERE cod_cia 					= g_cod_cia
-			   AND fec_asto     			= p_fec_asto  
-			   AND num_asto     			= p_num_asto   
-			   AND num_bloque_tes_origen	= p_num_bloque;
-		--
-		l_reg_tes c_tesoreria%ROWTYPE;
-		l_reg_trs c_traspasos%ROWTYPE;
-		--
-	BEGIN 
-		--
-		p_mon_creditos := 0;
-		p_mon_debitos  := 0;
-		--
-		OPEN c_tesoreria;
-		FETCH c_tesoreria INTO l_reg_tes;
-		IF c_tesoreria%FOUND THEN
-			--
-			p_fec_movimiento 		:= l_reg_tes.fec_asto;
-			p_cod_usuario_registo	:= l_reg_tes.cod_cajero;
-			p_fec_registro          := l_reg_tes.fec_actu;
-			p_des_nombre_originario	:= l_reg_tes.nom_movim;
-			p_cod_canal				:= l_reg_tes.tip_actu;
-			p_des_canal             := fp_desc_catalogo( 'TIP_ACTU', p_cod_canal, 'ES' ); 
-			--
-			IF l_reg_tes.tip_imp = 'H' THEN 
-				p_mon_creditos := l_reg_tes.imp_mon_pais;
-			ELSIF l_reg_tes.tip_imp = 'D' THEN
-			 	p_mon_debitos := l_reg_tes.imp_mon_pais;
-			END IF;
-			--
-			IF l_reg_tes.num_cheque IS NOT NULL THEN
-			    l_tip_pago		     := 'CHQ';
-				p_cod_banco_origen   := l_reg_tes.cod_entidad_cheque;
-			ELSIF l_reg_tes.num_tarjeta IS NOT NULL THEN 
-			    l_tip_pago		     := 'TAR';
-				p_num_cuenta_origen := l_reg_tes.num_tarjeta; 
-			ELSE
-				p_num_cuenta_origen := NULL;	
-			END IF;	
-			p_cod_banco_destino	 := l_reg_tes.cod_entidad;
-			p_num_cuenta_destino := l_reg_tes.cod_cta_simp;
-			--
-		END IF;
-		CLOSE c_tesoreria; 
-		--
-		OPEN c_traspasos(l_reg_tes.fec_asto, l_reg_tes.num_asto);
-		FETCH c_traspasos INTO l_reg_trs;
-		IF c_traspasos%FOUND THEN
-			--
-			IF l_tip_pago = 'CHQ' THEN
-				p_num_cuenta_origen  	  := nvl( p_num_cuenta_origen, l_reg_trs.cta_cte_cheque ); 
-				p_des_nombre_beneficiario := nvl( p_des_nombre_beneficiario, l_reg_trs.nom_tercero_giro );
-			ELSIF l_tip_pago = 'TAR' THEN
-				p_num_cuenta_origen := nvl( p_num_cuenta_origen, l_reg_trs.num_tarjeta );
-			END IF;	
-			p_num_cuenta_destino := nvl( p_num_cuenta_destino, l_reg_trs.cod_cta_simp ); 
-			--
-		END IF;
-		CLOSE c_traspasos;
-		--
-		p_tip_pago := l_tip_pago;
-		--
-		EXCEPTION
-			WHEN NO_DATA_FOUND THEN
-				RETURN;
-			WHEN OTHERS THEN
-				pp_establecer_error;
-		--
-	END p_datos_tesoreria;	
     --
     -- informacion del asegurado
     FUNCTION f_datos_asegurado( p_tip_docum a1001399.tip_docum%TYPE,
@@ -291,9 +178,13 @@ create or replace PACKAGE BODY gc_k_mov_economico_mcr AS
 		--
 		-- tesoreria
 		CURSOR c_tesoreria( p_num_bloque a5020301.num_bloque_tes%TYPE ) IS 
-			SELECT * 
+			SELECT *  
 	          FROM v5021600_1900 
 	         WHERE cod_cia        = g_cod_cia
+			   AND  ( fec_asto >= nvl( g_fecha_desde, fec_asto ) 
+			          AND  
+					  fec_asto <= nvl( g_fecha_hasta, fec_asto )  
+					)
 	           AND num_bloque_tes = p_num_bloque;	
 		--
 		-- datos de	traspasos de tesoreria
@@ -435,6 +326,10 @@ create or replace PACKAGE BODY gc_k_mov_economico_mcr AS
 			SELECT * 
 	          FROM v5021600_1900 
 	         WHERE cod_cia        = g_cod_cia
+			   AND  ( fec_asto >= nvl( g_fecha_desde, fec_asto ) 
+			          AND  
+					  fec_asto <= nvl( g_fecha_hasta, fec_asto )  
+					) 
 	           AND num_bloque_tes = p_num_bloque;	
 		--
     BEGIN 
@@ -553,7 +448,9 @@ create or replace PACKAGE BODY gc_k_mov_economico_mcr AS
 	-- lista de movimientos economicos
   	FUNCTION f_list_mov_economico(  p_cod_cia       IN a1001331.cod_cia%type,
                                   	p_tip_docum     IN a1001331.tip_docum%type,
-                                  	p_cod_docum     IN a1001331.cod_docum%TYPE
+                                  	p_cod_docum     IN a1001331.cod_docum%TYPE,
+									p_fecha_desde	IN DATE,
+									p_fecha_hasta	IN DATE  
                                 ) RETURN typ_tab_lista_me PIPELINED IS 
 
 	BEGIN 
@@ -563,6 +460,8 @@ create or replace PACKAGE BODY gc_k_mov_economico_mcr AS
 		g_cod_cia    		:= p_cod_cia;
 		g_tip_docum  		:= p_tip_docum;
 		g_cod_docum  		:= p_cod_docum;
+		g_fecha_desde       := p_fecha_desde;
+		g_fecha_hasta		:= p_fecha_hasta;
 		g_nom_completo		:= f_datos_asegurado( g_tip_docum, g_cod_docum );
 		--
 		p_agregar_polizas;
@@ -575,8 +474,7 @@ create or replace PACKAGE BODY gc_k_mov_economico_mcr AS
 		--
 		EXCEPTION
 			WHEN OTHERS THEN 
-				-- pp_establecer_error;
-				null;
+				pp_establecer_error;
 		--
 	END f_list_mov_economico;	
 	--
@@ -585,19 +483,19 @@ create or replace PACKAGE BODY gc_k_mov_economico_mcr AS
 	BEGIN 
 		--
         p_tratar_json(p_json);
+		g_nom_completo := f_datos_asegurado( g_tip_docum, g_cod_docum );
 		--
 		p_agregar_polizas;
 		--
 		FOR i IN 1..g_tabla_list_mv.count LOOP 
-      		PIPE ROW(g_tabla_list_mv(i));
+      		PIPE ROW( g_tabla_list_mv(i) );
     	END LOOP;
     	--
     	RETURN;
 		--
 		EXCEPTION
 			WHEN OTHERS THEN 
-				-- pp_establecer_error;
-				null;
+				pp_establecer_error;
 		--
 	END f_list_mov_economico;															
 	--
