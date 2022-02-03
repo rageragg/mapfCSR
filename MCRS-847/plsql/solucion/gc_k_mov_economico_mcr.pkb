@@ -7,6 +7,7 @@ create or replace PACKAGE BODY gc_k_mov_economico_mcr AS
 	g_fecha_desde	                DATE;
 	g_fecha_hasta					DATE;
 	g_nom_completo					VARCHAR2(255);
+	g_varios_clientes               BOOLEAN;
 	g_cod_subproducto				VARCHAR2(50);
 	g_reg 							typ_reg_me;
 	--
@@ -74,6 +75,7 @@ create or replace PACKAGE BODY gc_k_mov_economico_mcr AS
 		--
 		EXCEPTION
 			WHEN OTHERS THEN
+			   dbms_output.put_line(p_reg.num_referencia);
 				pp_establecer_error;
 		--			 
 	END p_agregar_registro;
@@ -159,21 +161,33 @@ create or replace PACKAGE BODY gc_k_mov_economico_mcr AS
 		CURSOR c_recibos IS
 			SELECT * 
 			  FROM a2990700
-			 WHERE cod_cia    = g_cod_cia
-		  	   AND num_poliza = p_num_poliza
-			   AND num_spto   = p_num_spto
+			 WHERE cod_cia       = g_cod_cia
+		  	   AND num_poliza    = p_num_poliza
+			   AND num_spto      = p_num_spto
+			   AND num_apli      = 0
+			   AND num_spto_apli = 0 
+			   AND tip_situacion = 'CT'
+			   AND fec_efec_recibo >= g_fecha_desde 
+			   AND fec_efec_recibo <= g_fecha_hasta
 			ORDER BY num_recibo;
 		--
 		-- historicos de recibos
-		CURSOR c_historico( p_num_recibo a5020301.num_recibo%TYPE ) IS
+		CURSOR c_historico( p_num_recibo a5020301.num_recibo%TYPE, 
+		                    p_num_cuota  a5020301.num_cuota%TYPE
+		                  ) IS
 			SELECT * 
 			  FROM a5020301
-		     WHERE cod_cia    = g_cod_cia
-			   AND num_poliza = p_num_poliza
-			   AND num_spto   = p_num_spto
-			   AND num_recibo = p_num_recibo
+		     WHERE cod_cia       = g_cod_cia
+			   AND num_poliza    = p_num_poliza
+			   AND num_spto      = p_num_spto
+			   AND num_apli      = 0
+			   AND num_spto_apli = 0
+			   AND num_cuota     = p_num_cuota
+			   AND num_recibo    = p_num_recibo
 			   AND tip_situacion = 'CT'
 			   AND num_bloque_tes is not null
+			   AND fec_efec_recibo >= g_fecha_desde 
+			   AND fec_efec_recibo <= g_fecha_hasta
 		    ORDER BY num_recibo;
 		--
 		-- tesoreria
@@ -181,10 +195,10 @@ create or replace PACKAGE BODY gc_k_mov_economico_mcr AS
 			SELECT *  
 	          FROM v5021600_1900 
 	         WHERE cod_cia        = g_cod_cia
-			   AND  ( fec_asto >= nvl( g_fecha_desde, fec_asto ) 
-			          AND  
-					  fec_asto <= nvl( g_fecha_hasta, fec_asto )  
-					)
+			--    AND  ( fec_asto >= nvl( g_fecha_desde, fec_asto ) 
+			--           AND  
+			-- 		  fec_asto <= nvl( g_fecha_hasta, fec_asto )  
+			-- 		)
 	           AND num_bloque_tes = p_num_bloque;	
 		--
 		-- datos de	traspasos de tesoreria
@@ -217,7 +231,7 @@ create or replace PACKAGE BODY gc_k_mov_economico_mcr AS
 			l_reg.cod_moneda_producto	:= v.cod_mon;
 			l_reg.cod_oficina			:= v.cod_nivel3;
 			--
-			FOR h IN c_historico( v.num_recibo ) LOOP
+			FOR h IN c_historico( v.num_recibo, v.num_cuota ) LOOP
 				--
 			    l_reg.num_identificacion_originario := h.num_bloque_tes;
 				l_reg.ind_origen_transaccion        := 'RECIBO';
@@ -409,21 +423,57 @@ create or replace PACKAGE BODY gc_k_mov_economico_mcr AS
 	PROCEDURE p_agregar_polizas IS
 		--
 		-- cursor polizas asociadas al tomador
-		CURSOR c_polizas is 
-		SELECT DISTINCT cod_ramo, num_poliza, num_spto, tip_spto
-			FROM a2000030 
-		   WHERE cod_cia    = g_cod_cia
-		 	 AND tip_docum  = g_tip_docum
-			 AND cod_docum  = g_cod_docum
-			 AND tip_spto  != 'SM'
-			 AND mca_poliza_anulada = 'N'
-		 ORDER BY num_poliza, num_spto; 
+		CURSOR c_polizas IS
+		WITH rm AS ( SELECT cod_cia, cod_ramo FROM a1001800 where cod_cia = g_cod_cia order by cod_ramo )
+		SELECT DISTINCT a.cod_ramo, a.num_poliza, a.num_spto, a.tip_spto, a.tip_docum, a.cod_docum
+			FROM a2000030 a,
+			     rm
+		   WHERE a.tip_docum  = nvl( NULL, a.tip_docum )
+			 AND a.cod_docum  = nvl( NULL, a.cod_docum )
+			 AND a.tip_spto  != 'SM'
+			 AND a.mca_poliza_anulada = 'N'
+			 AND a.cod_cia    = rm.cod_cia
+			 AND a.cod_ramo   = rm.cod_ramo
+			 AND (  
+                   EXISTS( 
+                             SELECT DISTINCT 'X' 
+                              FROM a2990700 b
+                             WHERE b.cod_cia    = a.cod_cia
+                               AND b.num_poliza = a.num_poliza
+                               AND b.num_spto   = a.num_spto
+                               AND b.fec_efec_recibo >= g_fecha_desde AND b.fec_efec_recibo <=  g_fecha_hasta
+                   ) OR
+                   EXISTS(
+                       SELECT DISTINCT 'X' 
+                          FROM a7000900 c,
+                               a3001700 d  
+                         WHERE c.cod_cia    = d.cod_cia
+                           AND c.cod_ramo   = d.cod_ramo
+                           AND c.num_sini   = d.num_sini
+                           AND c.cod_cia    = a.cod_cia
+                           AND c.cod_ramo   = a.cod_ramo
+                           AND c.num_poliza = a.num_poliza
+                           AND c.num_spto   = a.num_spto
+                           AND c.fec_sini   >= g_fecha_desde AND  c.fec_sini <= g_fecha_hasta
+                   )
+                 )    
+		  ORDER BY a.num_poliza, a.num_spto; 
 		--   
 	BEGIN 
 		--
 		FOR v IN c_polizas LOOP
 			-- 
 			-- agreamos al vector de polizas
+			IF g_varios_clientes THEN
+				--
+				IF nvl(g_tip_docum,'*') != v.tip_docum OR nvl(g_cod_docum,'*') != v.cod_docum THEN
+					g_tip_docum         := v.tip_docum;
+					g_cod_docum         := v.cod_docum;
+					g_nom_completo		:= f_datos_asegurado( g_tip_docum, g_cod_docum );
+				END IF;
+				--	
+			END IF;	
+
 		    g_cod_subproducto	:= f_modalidad( p_num_poliza => v.num_poliza );
 			p_agregar_recibos( 	p_cod_ramo   => v.cod_ramo,
 								p_num_poliza => v.num_poliza,
@@ -438,7 +488,9 @@ create or replace PACKAGE BODY gc_k_mov_economico_mcr AS
 								);				
 			--									
 		END LOOP;
-			--
+		--
+		COMMIT;
+		--
 		EXCEPTION
 			WHEN OTHERS THEN
 				pp_establecer_error;	
@@ -462,7 +514,11 @@ create or replace PACKAGE BODY gc_k_mov_economico_mcr AS
 		g_cod_docum  		:= p_cod_docum;
 		g_fecha_desde       := p_fecha_desde;
 		g_fecha_hasta		:= p_fecha_hasta;
-		g_nom_completo		:= f_datos_asegurado( g_tip_docum, g_cod_docum );
+		g_varios_clientes   := ( p_tip_docum IS NULL ) OR ( p_cod_docum IS NULL );
+
+		IF NOT g_varios_clientes THEN
+			g_nom_completo := f_datos_asegurado( g_tip_docum, g_cod_docum );
+		END IF;	
 		--
 		p_agregar_polizas;
 		--
@@ -482,8 +538,14 @@ create or replace PACKAGE BODY gc_k_mov_economico_mcr AS
   	FUNCTION f_list_mov_economico( p_json VARCHAR2 ) RETURN typ_tab_lista_me PIPELINED IS 
 	BEGIN 
 		--
+		p_eliminar_registros;
+		--
         p_tratar_json(p_json);
-		g_nom_completo := f_datos_asegurado( g_tip_docum, g_cod_docum );
+		g_varios_clientes   := ( g_tip_docum IS NULL ) OR ( g_cod_docum IS NULL );
+		
+		IF NOT g_varios_clientes THEN
+			g_nom_completo := f_datos_asegurado( g_tip_docum, g_cod_docum );
+		END IF;	
 		--
 		p_agregar_polizas;
 		--

@@ -9,6 +9,7 @@
 * 18/01/2022    Se agrega los siniestros
 * 18/01/2022    Se realiza la entrega
 * 20/01/2022    Se incluye parametros de fecha, que aplica filtros sobre las fechas de los movimientos en la vista v5021600_1900
+* 03/02/2022    Se pide que se permita la seleccion de varios clientes 
                 
 ### Objetos Relacionados
 - dc_k_terceros_trn, Paquete de Procesamiento de datos de terceros
