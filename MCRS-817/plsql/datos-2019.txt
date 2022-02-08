@@ -1,0 +1,55 @@
+FECHA PROCESAMIENTO: 08/02/2022
+----------------------------------------------------------
+CONTENIDO DE ARCHIVO .CSV
+----------------------------------------------------------
+5244710266618387;303900096;DAHIANNA PEREZ LARA;1,794,42;1;01/06/2021
+5244710266618387;303900096;DAHIANNA PEREZ LARA;1,794,42;1;01/07/2020
+5244710239489023;111680310;RELFA ISABEL CASTILLO RODRIGUEZ;540.26;1;01/10/2021
+
+DATOS DE PRUEBA
+----------------------------------------------------------
+Tarjeta: 5244710266618387   
+Documento: 303900096;  
+Nombre: DAHIANNA PEREZ LARA;    
+Monto Pago: 1794.42; 
+Moneda: 1;  
+Fecha Pago: 01/06/2021
+
+POLIZA SELECCIONADA DE LOS DATOS DE PRUEBAS
+----------------------------------------------------------
+Numero: 2302000123850	
+Suplemento: 0	
+Anulada?: N	
+Poliza Grupo: 2302000089201	
+Agente: 368	
+Documento Tomador: 4000001021	
+Tipo Documento Tomador: CJU
+
+RECIBOS SELECCIONADOS DE LOS DATOS DE PRUEBA
+----------------------------------------------------------
+NUM_RECIBO  IMP_RECIBO  FEC_EFEC_RECIBO     FEC_VCTO_RECIBO
+3924545	    1794,34	    01/06/20	        01/07/20    *
+3924547	    1794,34	    01/08/20	        01/09/20    *
+3924548	    1794,34	    01/09/20	        01/10/20
+3924549	    1794,34	    01/10/20	        01/11/20
+3924550	    1794,34	    01/11/20	        01/12/20
+3924551	    1794,34	    01/12/20	        01/01/21
+3924552	    1794,34	    01/01/21	        01/02/21
+3924553	    1794,34	    01/02/21	        01/03/21
+3924554	    1794,34	    01/03/21	        01/04/21
+3924555	    1794,34	    01/04/21	        01/05/21
+3924556	    1794,29	    01/05/21	        01/06/21
+
+RESULTADO DEL PROCESAMIENTO
+------------------------------------------------------------
+LISTADO DE RECIBOS ASOCIADOS A AVISO  ID 250
+
+AVISO DE COBRO: 6620
+Moneda: CRC   COLONES
+
+NUM_AVISO;Num Poliza;Num Recibo;Situacion;Importe Recibo;Importe Pago;Fecha Efecto Recibo; Fecha Vcto Recibo
+6620;2302000123156;3916217;RE;540.23;540.26;01/06/2020;01/07/2020
+6620;2302000123850;3924545;RE;1,794.34;0.00;01/06/2020;01/07/2020
+6620;2302000123850;3924547;RE;1,794.34;0.00;01/08/2020;01/09/2020
+
+Total Recibos 3

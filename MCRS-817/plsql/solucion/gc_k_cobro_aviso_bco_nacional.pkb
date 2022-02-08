@@ -319,7 +319,7 @@ CREATE OR REPLACE PACKAGE BODY gc_k_cobro_aviso_bco_nacional IS
         ptraza1(l_listado,
                 'w',
                 'LISTADO DE RECIBOS ASOCIADOS A AVISO ' ||
-                ' Fecha ' || to_char(g_fec_proceso, 'dd/mm/yyyy') || 
+                -- ' Fecha ' || to_char(g_fec_proceso, 'dd/mm/yyyy') || 
                 ' ID ' || g_id_proceso
         );
         --
@@ -426,8 +426,8 @@ CREATE OR REPLACE PACKAGE BODY gc_k_cobro_aviso_bco_nacional IS
         --
     BEGIN 
         --
-        INSERT INTO a5021691_mcr
-            (cod_cia,
+        INSERT INTO a5021691_mcr(
+            cod_cia,
             id_proceso,
             fec_proceso,
             cantidad_registros,
@@ -440,8 +440,14 @@ CREATE OR REPLACE PACKAGE BODY gc_k_cobro_aviso_bco_nacional IS
             observaciones,
             nombre_archivo,
             cod_usr,
-            fec_actu)
-        VALUES(g_cod_cia,
+            fec_actu,
+            num_recibo,
+            num_poliza,
+            num_spto,
+            tip_docum
+        )
+        VALUES(
+            g_cod_cia,
             g_id_proceso,
             g_fec_proceso,
             g_cant_registros,
@@ -454,7 +460,12 @@ CREATE OR REPLACE PACKAGE BODY gc_k_cobro_aviso_bco_nacional IS
             NULL,
             g_nombre_archivo,
             g_cod_usr,
-            trn_k_tiempo.f_fec_actu);
+            trn_k_tiempo.f_fec_actu,
+            g_num_recibo,
+            g_num_poliza,
+            g_num_spto,
+            g_tip_docum_tomador
+        );
         --
         --ptraza('cobro_aviso', 'a', '0.1');
         IF SQL%ROWCOUNT > 0 THEN
@@ -481,8 +492,8 @@ CREATE OR REPLACE PACKAGE BODY gc_k_cobro_aviso_bco_nacional IS
         IF p_monto IS NOT NULL THEN
           --
           SELECT to_number( trim(p_monto),
-                              '9G999G999G990D00',
-                              'NLS_NUMERIC_CHARACTERS=' || l_sep_dec || l_sep_mil )
+                              '9G999G999G990D00'
+                          )
             INTO l_valor_retorno
             FROM DUAL;
           --
@@ -610,11 +621,16 @@ CREATE OR REPLACE PACKAGE BODY gc_k_cobro_aviso_bco_nacional IS
                        AND r.num_poliza    = g_num_poliza
                        AND r.imp_recibo > 0
                        AND r.num_aviso IS NULL
-                       AND extract(MONTH FROM r.fec_efec_recibo) = extract(MONTH FROM p_fec_pago) 
-                       AND extract(YEAR FROM r.fec_efec_recibo) = extract(YEAR FROM p_fec_pago) 
+                      -- AND extract(MONTH FROM r.fec_efec_recibo) = extract(MONTH FROM p_fec_pago) 
+                      -- AND extract(YEAR FROM r.fec_efec_recibo) = extract(YEAR FROM p_fec_pago) 
                      ORDER BY r.fec_efec_recibo ASC
                    ) x
-             WHERE ROWNUM = 1;
+             WHERE (  x.num_recibo ) NOT IN (
+                 SELECT z.num_recibo
+                   FROM a5021691_mcr z
+                  WHERE z.cod_cia = g_cod_cia  
+                    AND z.num_recibo IS NOT NULL
+             );
         --     
     BEGIN 
         --
@@ -781,8 +797,7 @@ CREATE OR REPLACE PACKAGE BODY gc_k_cobro_aviso_bco_nacional IS
                AND num_aviso IS NULL;
             --
             UPDATE a5021691_mcr
-               SET num_recibo    = p_registro.num_recibo,
-                   num_aviso     = p_registro.num_aviso,
+               SET num_aviso     = p_registro.num_aviso,
                    observaciones = p_registro.observacion,
                    mca_procesado = p_registro.mca_procesado
              WHERE cod_cia            = g_cod_cia 
@@ -790,7 +805,8 @@ CREATE OR REPLACE PACKAGE BODY gc_k_cobro_aviso_bco_nacional IS
                AND trunc(fec_proceso) = g_fec_proceso 
                AND num_tarjeta        = p_registro.num_tarjeta
                AND cod_docum          = p_registro.cod_docum_pago
-               AND nombre_archivo     = g_nombre_archivo;
+               AND nombre_archivo     = g_nombre_archivo
+               AND num_recibo         = p_registro.num_recibo;
             --   
         END pi_actualiza_aviso;    
         --
@@ -799,16 +815,16 @@ CREATE OR REPLACE PACKAGE BODY gc_k_cobro_aviso_bco_nacional IS
         BEGIN
             --
             UPDATE a5021691_mcr
-               SET num_recibo    = p_registro.num_recibo,
-                   num_aviso     = p_registro.num_aviso,
-                   observaciones   = p_registro.observacion,
+               SET num_aviso     = p_registro.num_aviso,
+                   observaciones = p_registro.observacion,
                    mca_procesado = p_registro.mca_procesado
              WHERE cod_cia            = g_cod_cia 
                AND id_proceso         = g_id_proceso    
                AND trunc(fec_proceso) = g_fec_proceso 
                AND num_tarjeta        = p_registro.num_tarjeta
                AND cod_docum          = p_registro.cod_docum_pago
-               AND nombre_archivo     = g_nombre_archivo;
+               AND nombre_archivo     = g_nombre_archivo
+               AND num_recibo         = p_registro.num_recibo;
             --   
         END pi_actualiza_registro;   
         --
