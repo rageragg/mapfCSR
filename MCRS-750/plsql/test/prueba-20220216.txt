@@ -1,0 +1,19 @@
+PRUEBA DE EMISION
+-----------------
+Ramo: 302
+Datos del Tomador: CNA	103941376
+Datos del Pagador: CNA	502290247
+------------------
+Emision 
+------------------
+Poliza: 3022210110758
+
+
+-- procesos que se ejecutan luego de la emision
+select * from g2990016;
+-- tabla de los terceros
+select * from a1001331;
+-- modificaciones locales de un tercero para una poliza
+select * from a1000802;
+-- buzon de cobro
+select * from a5020039;
