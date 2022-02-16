@@ -195,10 +195,10 @@ create or replace PACKAGE BODY gc_k_mov_economico_mcr AS
 			SELECT *  
 	          FROM v5021600_1900 
 	         WHERE cod_cia        = g_cod_cia
-			--    AND  ( fec_asto >= nvl( g_fecha_desde, fec_asto ) 
-			--           AND  
-			-- 		  fec_asto <= nvl( g_fecha_hasta, fec_asto )  
-			-- 		)
+			   AND  ( fec_asto >= nvl( g_fecha_desde, fec_asto ) 
+			          AND  
+					  fec_asto <= nvl( g_fecha_hasta, fec_asto )  
+					)
 	           AND num_bloque_tes = p_num_bloque;	
 		--
 		-- datos de	traspasos de tesoreria
@@ -428,8 +428,8 @@ create or replace PACKAGE BODY gc_k_mov_economico_mcr AS
 		SELECT DISTINCT a.cod_ramo, a.num_poliza, a.num_spto, a.tip_spto, a.tip_docum, a.cod_docum
 			FROM a2000030 a,
 			     rm
-		   WHERE a.tip_docum  = nvl( NULL, a.tip_docum )
-			 AND a.cod_docum  = nvl( NULL, a.cod_docum )
+		   WHERE a.tip_docum  = nvl( g_tip_docum, a.tip_docum )
+			 AND a.cod_docum  = nvl( g_cod_docum, a.cod_docum )
 			 AND a.tip_spto  != 'SM'
 			 AND a.mca_poliza_anulada = 'N'
 			 AND a.cod_cia    = rm.cod_cia
