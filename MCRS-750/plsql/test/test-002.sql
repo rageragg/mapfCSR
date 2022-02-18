@@ -1,0 +1,14 @@
+begin
+  trn_k_global.asigna('jbcod_cia',1);
+  trn_k_global.asigna('jbfec_desde','17022022');
+  trn_k_global.asigna('jbfec_hasta','17022022');
+  trn_k_global.asigna('jbtip_gestor','TA');
+  trn_k_global.asigna('jbcod_gestor','01610000');
+  trn_k_global.asigna('jbcod_mon',1);
+  trn_k_global.asigna('jbcod_cta_simp','BAC01');
+  trn_k_global.asigna('jbfec_remesa','18022022');
+  trn_k_global.asigna('jbfec_cobro','18022022');
+  --
+  gc_k_recibos_domi_mcr.p_proceso_con_globales;
+  --
+end;

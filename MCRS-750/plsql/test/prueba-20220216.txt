@@ -6,7 +6,7 @@ Datos del Pagador: CNA	502290247
 ------------------
 Emision 
 ------------------
-Poliza: 3022210110758
+Poliza: 3022210110775        
 
 
 -- procesos que se ejecutan luego de la emision
