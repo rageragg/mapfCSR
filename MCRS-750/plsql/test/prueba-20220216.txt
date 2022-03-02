@@ -1,8 +1,10 @@
 PRUEBA DE EMISION
 -----------------
 Ramo: 302
-Datos del Tomador: CNA	103941376
-Datos del Pagador: CNA	502290247
+Datos del Tomador:  CNA	103941376   Tarjeta: 5376********0488   -> 01230000
+Datos del Pagador:  CNA	502290247   Tarjeta: 4912********8415   -> 01230000  
+------------------
+Otro tercero:       CJU	3101514612  Tarjeta: 3777********9265   -> 01020000
 ------------------
 Emision 
 ------------------

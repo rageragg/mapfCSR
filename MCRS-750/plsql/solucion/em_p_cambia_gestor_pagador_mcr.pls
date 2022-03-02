@@ -23,7 +23,12 @@ CREATE OR REPLACE PROCEDURE em_p_cambia_gestor_pagador_mcr IS
 	/* --------------------------------------------------------------------------------------------
 	|| Declaracion de Variables Locales
 	*/ --------------------------------------------------------------------------------------------
-	--
+    --
+    -- constantes
+    k_cod_grupo CONSTANT VARCHAR2(15) := 'PCGC00001';
+    k_vi        CONSTANT VARCHAR2(03) := 'VI_';
+    k_cod_sur   CONSTANT VARCHAR2(15) := 'TRON2000';
+    --
 	-- Variables para almacenar los datos variables del riesgo
 	l_cod_cia        ta300003.cod_cia %TYPE;
 	l_num_poliza     a2000030.num_poliza %TYPE;
@@ -40,6 +45,7 @@ CREATE OR REPLACE PROCEDURE em_p_cambia_gestor_pagador_mcr IS
 	l_cod_tarjeta    a1001331.cod_tarjeta%TYPE;
 	l_tip_tarjeta    a1001331.tip_tarjeta%TYPE;
 	l_cod_gestor     a2000030.cod_gestor%TYPE;
+    l_cod_gestor_ana a2000030.cod_gestor%TYPE;
 	l_traza          VARCHAR2(100);
 	--
 	l_cant           NUMBER := 0;
@@ -56,6 +62,32 @@ CREATE OR REPLACE PROCEDURE em_p_cambia_gestor_pagador_mcr IS
 		   AND num_apli      = l_num_apli
 	 	   AND num_spto_apli = l_num_spto_apli
 		   AND tip_situacion = 'EP';
+    --
+    -- analisis de tarjeta
+    PROCEDURE pp_analisis_tarjeta IS 
+        --
+        -- buscamos la configuracion de la tarjeta
+        CURSOR c_analisis IS
+            SELECT cast( txt_valor_variable as varchar2(13))
+              FROM g1010107
+             WHERE cod_usr              = k_cod_sur
+               AND cod_grupo            = k_cod_grupo
+               AND txt_nombre_variable  = k_vi || substr(l_num_tarjeta,1,1);
+        --
+    BEGIN 
+		--
+        OPEN c_analisis; 
+        FETCH c_analisis INTO l_cod_gestor_ana;
+        CLOSE c_analisis;
+        --
+        EXCEPTION 
+            WHEN NO_DATA_FOUND THEN
+                l_cod_gestor_ana := NULL;
+            WHEN OTHERS THEN 
+                l_cod_gestor_ana := NULL;
+        --        
+    END pp_analisis_tarjeta;
+    --
   	--
 	-- verifica la integridad del dato del pagador si lo hubiera
 	PROCEDURE p_procesa_pagador IS 
@@ -355,11 +387,19 @@ BEGIN
 			l_cod_entidad := dc_k_terceros.f_cod_entidad;
 			l_cod_oficina := dc_k_terceros.f_cod_oficina;
 			--
-			IF l_cod_entidad IS NOT NULL THEN
-				l_cod_gestor := l_cod_entidad || l_cod_oficina;
-			ELSE
-				l_cod_gestor := '01020000'; -- OJO
-			END IF;
+			-- analiza el codigo numero de tarjeta
+			pp_analisis_tarjeta;
+			--
+			-- si existe un codigo de gestor derivado del analisis entonces se aplica
+			IF l_cod_gestor_ana IS NOT NULL THEN 
+			  	l_cod_gestor := l_cod_gestor_ana;
+			ELSE	  
+				IF l_cod_entidad IS NOT NULL THEN
+					l_cod_gestor := l_cod_entidad || l_cod_oficina;
+				ELSE
+					l_cod_gestor := '01020000'; -- OJO
+				END IF;
+			END IF;	
 			--
 			-- se cambian los recibos pendientes
 			FOR reg IN c_a2990700 LOOP

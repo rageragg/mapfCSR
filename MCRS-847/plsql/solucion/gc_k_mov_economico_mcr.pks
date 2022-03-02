@@ -23,7 +23,7 @@ create or replace PACKAGE gc_k_mov_economico_mcr AS
 		cod_subproducto             VARCHAR2(50),
 		num_referencia              VARCHAR2(64),               -- numero de poliza + numero de suplemento
 		fec_movimiento              DATE,
-		cod_tipo_movimiento         a2000030.tip_spto%TYPE,
+		cod_tipo_movimiento         VARCHAR2(4),
 		cod_oficina                 INTEGER,
 		cod_canal                   VARCHAR2(2),
 		des_canal                   VARCHAR2(50),

@@ -148,10 +148,11 @@ create or replace PACKAGE BODY gc_k_mov_economico_mcr AS
     END f_datos_asegurado;									
     --
 	-- agregamos los recibos asociadas al tercero
-	PROCEDURE p_agregar_recibos(  	p_cod_ramo   a2000030.cod_ramo%TYPE,
-		            				p_num_poliza a2990700.num_poliza%TYPE,
-                                	p_num_spto   a2990700.num_spto%TYPE,
-									p_tip_spto   a2000030.tip_spto%TYPE  
+	PROCEDURE p_agregar_recibos(  	p_cod_ramo   	a2000030.cod_ramo%TYPE,
+		            				p_num_poliza 	a2990700.num_poliza%TYPE,
+                                	p_num_spto   	a2990700.num_spto%TYPE,
+									p_tip_spto   	a2000030.tip_spto%TYPE,
+									p_cod_tip_spto 	a2000030.cod_tip_spto%TYPE
 		                        )	IS  
 		--
 		l_reg 						typ_reg_me;
@@ -225,6 +226,10 @@ create or replace PACKAGE BODY gc_k_mov_economico_mcr AS
 		l_reg.cod_subproducto             := g_cod_subproducto;
 		l_reg.cod_tipo_movimiento		  := p_tip_spto;
 		--
+		IF p_cod_tip_spto IS NOT NULL THEN
+			l_reg.cod_tipo_movimiento		  := p_tip_spto || p_cod_tip_spto;
+		END IF;	
+		--
 		FOR v IN c_recibos LOOP
 			--
 			l_reg.cod_moneda  			:= v.cod_mon;
@@ -297,10 +302,11 @@ create or replace PACKAGE BODY gc_k_mov_economico_mcr AS
 	END p_agregar_recibos;
 	--
 	-- agregamos siniestros
-	PROCEDURE p_agregar_siniestros(	p_cod_ramo   a2000030.cod_ramo%type,
-		            				p_num_poliza a2990700.num_poliza%type,
-                                	p_num_spto   a2990700.num_spto%type,
-									p_tip_spto   a2000030.tip_spto%type 
+	PROCEDURE p_agregar_siniestros(	p_cod_ramo   	a2000030.cod_ramo%TYPE,
+		            				p_num_poliza 	a2990700.num_poliza%TYPE,
+                                	p_num_spto   	a2990700.num_spto%TYPE,
+									p_tip_spto   	a2000030.tip_spto%TYPE,
+									p_cod_tip_spto 	a2000030.cod_tip_spto%TYPE
 								  ) IS 
 		--
 		l_reg 						typ_reg_me;
@@ -355,6 +361,10 @@ create or replace PACKAGE BODY gc_k_mov_economico_mcr AS
 		l_reg.num_referencia              := p_num_poliza ||'-'||to_char(p_num_spto);
 		l_reg.cod_subproducto             := g_cod_subproducto;
 		l_reg.cod_tipo_movimiento		  := p_tip_spto;
+		--
+		IF p_cod_tip_spto IS NOT NULL THEN
+			l_reg.cod_tipo_movimiento		  := p_tip_spto || p_cod_tip_spto;
+		END IF;	
 		--
 		FOR r_sini IN c_siniestros LOOP  
 			--
@@ -425,7 +435,7 @@ create or replace PACKAGE BODY gc_k_mov_economico_mcr AS
 		-- cursor polizas asociadas al tomador
 		CURSOR c_polizas IS
 		WITH rm AS ( SELECT cod_cia, cod_ramo FROM a1001800 where cod_cia = g_cod_cia order by cod_ramo )
-		SELECT DISTINCT a.cod_ramo, a.num_poliza, a.num_spto, a.tip_spto, a.tip_docum, a.cod_docum
+		SELECT DISTINCT a.cod_ramo, a.num_poliza, a.num_spto, a.tip_spto, a.cod_tip_spto, a.tip_docum, a.cod_docum
 			FROM a2000030 a,
 			     rm
 		   WHERE a.tip_docum  = nvl( g_tip_docum, a.tip_docum )
@@ -475,16 +485,18 @@ create or replace PACKAGE BODY gc_k_mov_economico_mcr AS
 			END IF;	
 
 		    g_cod_subproducto	:= f_modalidad( p_num_poliza => v.num_poliza );
-			p_agregar_recibos( 	p_cod_ramo   => v.cod_ramo,
-								p_num_poliza => v.num_poliza,
-								p_num_spto   => v.num_spto,
-								p_tip_spto   => v.tip_spto
+			p_agregar_recibos( 	p_cod_ramo   	=> v.cod_ramo,
+								p_num_poliza 	=> v.num_poliza,
+								p_num_spto   	=> v.num_spto,
+								p_tip_spto   	=> v.tip_spto,
+								p_cod_tip_spto	=> v.cod_tip_spto
 							);
 			-- 				
-			p_agregar_siniestros( p_cod_ramo   => v.cod_ramo,
-								  p_num_poliza => v.num_poliza,
-								  p_num_spto   => v.num_spto,
-								  p_tip_spto   => v.tip_spto
+			p_agregar_siniestros( p_cod_ramo   		=> v.cod_ramo,
+								  p_num_poliza 		=> v.num_poliza,
+								  p_num_spto   		=> v.num_spto,
+								  p_tip_spto   		=> v.tip_spto,
+								  p_cod_tip_spto	=> v.cod_tip_spto
 								);				
 			--									
 		END LOOP;

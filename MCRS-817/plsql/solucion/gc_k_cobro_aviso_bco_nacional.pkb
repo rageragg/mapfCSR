@@ -491,11 +491,12 @@ CREATE OR REPLACE PACKAGE BODY gc_k_cobro_aviso_bco_nacional IS
         --
         IF p_monto IS NOT NULL THEN
           --
-          SELECT to_number( trim(p_monto),
-                              '9G999G999G990D00'
-                          )
-            INTO l_valor_retorno
-            FROM DUAL;
+          l_valor_retorno := trim(p_monto);
+        --   SELECT to_number( trim(p_monto),
+        --                       '9G999G999G990D00'
+        --                   )
+        --     INTO l_valor_retorno
+        --     FROM DUAL;
           --
         END IF;
         --
@@ -503,7 +504,7 @@ CREATE OR REPLACE PACKAGE BODY gc_k_cobro_aviso_bco_nacional IS
         --
         EXCEPTION
             WHEN OTHERS THEN
-                dbms_output.put_line( SQLERRM );
+                dbms_output.put_line( 'f_procesa_monto ' || SQLERRM);
                 RETURN NULL;
         --        
     END f_procesa_monto;  
@@ -634,12 +635,6 @@ CREATE OR REPLACE PACKAGE BODY gc_k_cobro_aviso_bco_nacional IS
         --     
     BEGIN 
         --
-        IF p_fec_pago IS NULL THEN
-            g_num_recibo    := NULL;
-            g_imp_recibo    := 0; 
-            RETURN;
-        END IF;
-        --
         OPEN c_recibos;
         FETCH c_recibos INTO g_num_recibo, g_imp_recibo;
         IF c_recibos%NOTFOUND THEN
@@ -649,6 +644,8 @@ CREATE OR REPLACE PACKAGE BODY gc_k_cobro_aviso_bco_nacional IS
             --
             gc_k_a2990700.p_lee_rec( g_cod_cia, g_num_recibo );
             g_imp_recibo := gc_k_a2990700.f_tot_recibo;   
+
+            dbms_output.put_line(g_num_poliza ||' -> '||g_imp_recibo);
             -- 
         END IF; 
         CLOSE c_recibos;
@@ -673,9 +670,13 @@ CREATE OR REPLACE PACKAGE BODY gc_k_cobro_aviso_bco_nacional IS
         --    
     BEGIN 
         -- 
+        g_fecha_pago := NULL;
+        --
         FOR reg IN c_datos LOOP
             --
             l_linea := l_linea + 1;
+            --
+            dbms_output.put_line(reg.dato);
             --
             IF l_linea = 1 THEN         -- id. tarjeta
                 g_num_tarjeta := reg.dato;
@@ -693,7 +694,10 @@ CREATE OR REPLACE PACKAGE BODY gc_k_cobro_aviso_bco_nacional IS
             --
         END LOOP;
         --
-        g_registo_dato.fec_pago := f_procesa_fecha(g_fecha_pago);
+        IF g_fecha_pago IS NOT NULL THEN
+            g_registo_dato.fec_pago := f_procesa_fecha(g_fecha_pago);
+        END IF;
+        --    
         g_tip_docum_pago        := f_procesa_tip_docum;
         p_numero_poliza;
         p_recibo_poliza(g_registo_dato.fec_pago);
@@ -704,7 +708,9 @@ CREATE OR REPLACE PACKAGE BODY gc_k_cobro_aviso_bco_nacional IS
         g_registo_dato.tip_docum_pago       := g_tip_docum_pago;
         g_registo_dato.nombre_apellido      := g_nombre_apellido;
         g_registo_dato.monto_pago           := f_procesa_monto( g_monto_pago );
-        g_registo_dato.cod_mon              := g_moneda;
+        
+        g_registo_dato.cod_mon              := substr(g_moneda,1,1);
+
         g_registo_dato.num_poliza           := g_num_poliza;
         g_registo_dato.num_spto             := g_num_spto;
         g_registo_dato.mca_poliza_anulada   := g_mca_poliza_anulada;
@@ -720,6 +726,7 @@ CREATE OR REPLACE PACKAGE BODY gc_k_cobro_aviso_bco_nacional IS
         --
         EXCEPTION 
             WHEN OTHERS THEN 
+                dbms_output.put_line( 'p_tratar_line ' || SQLERRM);
                 g_cod_error := -20003;
                 p_devuelve_error( p_msg => 'p_tratar_line');
                 RAISE e_tratar_line;
@@ -739,6 +746,7 @@ CREATE OR REPLACE PACKAGE BODY gc_k_cobro_aviso_bco_nacional IS
                 --
                 utl_file.get_line(g_file, l_line);
                 l_cant_registros := l_cant_registros + 1;
+                dbms_output.put_line(l_line);
                 p_tratar_linea( l_line );
                 --
                 p_registrar_aviso;
